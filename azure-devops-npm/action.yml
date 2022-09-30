@@ -19,7 +19,7 @@ inputs:
   npmrc-path:
     description: "Path to the file"
     required: false
-    default: ".npmrc"
+    default: "~/.npmrc"
 runs:
   using: "composite"
   steps:
