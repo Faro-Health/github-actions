@@ -9,12 +9,11 @@ This github action generates a `.npmrc` file for Azure DevOps
 ```yaml
 - uses: Faro-Health/github-actions/azure-devops-npm@master
   with:
-    organisation: "farohealth"
+    organization: "farohealth"
     registry: "my_registry"
     user: "some_user"
     password: ${{ secrets.AZURE_NPM_TOKEN }}
     email: "some_user@farohealth.com"
-    npmrc-path: ~/.npmrc
 ```
 ### How to setup (You must follow steps 1 and 2 to make the action work)
 #### **Step 1**: Create a yaml workflow file in your project
@@ -38,12 +37,11 @@ jobs:
         - uses: actions/checkout@v2
         - uses: Faro-Health/github-actions/azure-devops-npm@master
           with:
-              organisation: farohealth
+              organization: farohealth
               registry: my_npm_registry
               user: some_user
               password: ${{ secrets.AZURE_NPM_TOKEN }}
               email: some_user@farohealth.com
-              npmrc-path: ~/.npmrc
         - name: Install dependencies
           run: npm install
         - name: Build
@@ -68,7 +66,7 @@ That's it! Once this is done, the action will be triggered on every push to mast
 
 | Name              | Description                                          | Required | Default  |
 | ----------------- | ---------------------------------------------------- | -------- |----------|
-| `organisation`    | Your Azure organisation                              | true     |    -     |
+| `organization`    | Your Azure organization                              | true     |    -     |
 | `registry`        | Your Azure registry                                  | true     |    -     |
 | `user`            | Your Azure user                                      | true     |    -     |
 | `password `       | Your Azure password                                  | true     |    -     |
