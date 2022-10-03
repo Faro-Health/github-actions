@@ -39,7 +39,6 @@ jobs:
         - uses: Faro-Health/github-actions/azure-devops-npm@master
           with:
               organisation: farohealth
-              project: my_project
               registry: my_npm_registry
               user: some_user
               password: ${{ secrets.AZURE_NPM_TOKEN }}
@@ -70,7 +69,6 @@ That's it! Once this is done, the action will be triggered on every push to mast
 | Name              | Description                                          | Required | Default  |
 | ----------------- | ---------------------------------------------------- | -------- |----------|
 | `organisation`    | Your Azure organisation                              | true     |    -     |
-| `project`         | Your Azure project                                   | true     |    -     |
 | `registry`        | Your Azure registry                                  | true     |    -     |
 | `user`            | Your Azure user                                      | true     |    -     |
 | `password `       | Your Azure password                                  | true     |    -     |
