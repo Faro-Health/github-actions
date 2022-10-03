@@ -1,0 +1,41 @@
+name: 'Azure DevOps NPM'
+description: 'Setup .npmrc file for azure authentification'
+inputs:
+  organisation:
+    description: 'Your Azure organisation'
+    required: true
+  registry:
+    description: "Your Azure registry"
+    required: true
+  user:
+    description: "Your Azure user"
+    required: true
+  password:
+    description: "Your Azure password"
+    required: true
+  email:
+    description: "Your Azure email"
+    required: true
+  npmrc-path:
+    description: "Path to the file"
+    required: false
+    default: "~/.npmrc"
+runs:
+  using: "composite"
+  steps:
+    - id: set_vars
+      run: |
+        echo "::set-output name=azure_url::$(echo 'pkgs.dev.azure.com/${{ inputs.organisation }}/_packaging/${{ inputs.registry }}/npm')"
+      shell: bash
+    - run: |
+        echo "registry=https://${{ steps.set_vars.outputs.azure_url }}/registry/" > ${{ inputs.npmrc-path }}
+        echo "always-auth=true" >> ${{ inputs.npmrc-path }}
+        echo "; begin auth token" >> ${{ inputs.npmrc-path }}
+        echo "//${{ steps.set_vars.outputs.azure_url }}/registry/:username=${{ inputs.user }}" >> ${{ inputs.npmrc-path }}
+        echo '//${{ steps.set_vars.outputs.azure_url }}/registry/:_password="${{ inputs.password}}"' >> ${{ inputs.npmrc-path }}
+        echo '//${{ steps.set_vars.outputs.azure_url }}/registry/:email=${{ inputs.email }}' >> ${{ inputs.npmrc-path }}
+        echo '//${{ steps.set_vars.outputs.azure_url }}/:username=${{ inputs.user }}' >> ${{ inputs.npmrc-path }}
+        echo '//${{ steps.set_vars.outputs.azure_url }}/:_password="${{ inputs.password }}"' >> ${{ inputs.npmrc-path }}
+        echo '//${{ steps.set_vars.outputs.azure_url }}/:email=${{ inputs.email }}' >> ${{ inputs.npmrc-path }}
+        echo '; end auth token' >> ${{ inputs.npmrc-path }}
+      shell: bash
