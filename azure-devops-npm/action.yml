@@ -1,8 +1,8 @@
 name: 'Azure DevOps NPM'
 description: 'Setup .npmrc file for azure authentification'
 inputs:
-  organisation:
-    description: 'Your Azure organisation'
+  organization:
+    description: 'Your Azure organization'
     required: true
   registry:
     description: "Your Azure registry"
@@ -25,7 +25,7 @@ runs:
   steps:
     - id: set_vars
       run: |
-        echo "::set-output name=azure_url::$(echo 'pkgs.dev.azure.com/${{ inputs.organisation }}/_packaging/${{ inputs.registry }}/npm')"
+        echo "::set-output name=azure_url::$(echo 'pkgs.dev.azure.com/${{ inputs.organization }}/_packaging/${{ inputs.registry }}/npm')"
       shell: bash
     - run: |
         echo "registry=https://${{ steps.set_vars.outputs.azure_url }}/registry/" > ${{ inputs.npmrc-path }}
