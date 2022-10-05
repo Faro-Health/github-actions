@@ -9692,6 +9692,7 @@ const main = async () => {
         const repository = core.getInput('repository', { required: true });
         const token = core.getInput('token', { required: true });
         const message = core.getInput('message', { required: true });
+        const conclusion = core.getInput('conclusion', { required: true });
 
         const octokit = new github.getOctokit(token);
         const [owner, repo] = repository.split('/');
@@ -9702,7 +9703,9 @@ const main = async () => {
             per_page: 2,
             page: 1,
         });
+        const [curRun, prevRun] = (data || {}).workflow_runs || [];
         console.log(data.workflow_runs);
+        console.log("conclusion", conclusion);
 
     } catch (error) {
         core.setFailed(error.message);

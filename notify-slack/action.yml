@@ -7,6 +7,9 @@ inputs:
   message:
     description: 'Message to show'
     required: true
+  conclusion:
+    description: 'Conclusion'
+    required: true
   token:
     description: 'The token to use to access the GitHub API'
     required: true
