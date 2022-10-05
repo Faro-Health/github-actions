@@ -1,5 +1,8 @@
+'use strict';
+
 const core = require('@actions/core');
 const github = require('@actions/github');
+const axios = require('axios').default;
 
 const main = async () => {
     try {
@@ -7,6 +10,7 @@ const main = async () => {
         const token = core.getInput('token', { required: true });
         const message = core.getInput('message', { required: true });
         const conclusion = core.getInput('conclusion', { required: true });
+        const slackWebHookUrl = core.getInput('slackWebHookUrl', { required: true });
 
         const octokit = new github.getOctokit(token);
         const [owner, repo] = repository.split('/');
@@ -21,6 +25,18 @@ const main = async () => {
         console.log(data.workflow_runs);
         console.log("conclusion", conclusion);
 
+        const payload = {
+          attachments: [{text: message, color: 'green'}]
+        };
+        const options = {
+          method: 'post',
+          baseURL: slackWebHookUrl,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+          },
+          data: payload,
+        };
+        await axios.request(options);
     } catch (error) {
         core.setFailed(error.message);
     }
