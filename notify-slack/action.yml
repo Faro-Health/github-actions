@@ -1,11 +1,8 @@
 name: 'Notify slack action'
 description: 'Notifies slack channel about builds'
 inputs:
-  owner:
-    description: 'Owner of the repo'
-    required: true
-  repo:
-    description: 'Name of the repo'
+  repository:
+    description: 'Name of the repository'
     required: true
   message:
     description: 'Message to show'
