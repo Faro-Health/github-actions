@@ -9699,7 +9699,7 @@ const main = async () => {
         const { data } = await octokit.rest.actions.listWorkflowRunsForRepo({
             owner: owner,
             repo: repo,
-            per_page: 1,
+            per_page: 2,
             page: 1,
         });
         console.log(data.workflow_runs);
