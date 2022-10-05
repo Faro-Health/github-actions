@@ -9689,12 +9689,12 @@ const github = __nccwpck_require__(5438);
 
 const main = async () => {
     try {
-        const owner = core.getInput('owner', { required: true });
-        const repo = core.getInput('repo', { required: true });
+        const repository = core.getInput('repository', { required: true });
         const token = core.getInput('token', { required: true });
         const message = core.getInput('message', { required: true });
 
         const octokit = new github.getOctokit(token);
+        const [owner, repo] = repository.split('/');
 
         const { data } = await octokit.rest.actions.listWorkflowRunsForRepo({
             owner: owner,
