@@ -15739,7 +15739,7 @@ var __webpack_exports__ = {};
 
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
-const axios = (__nccwpck_require__(8757)["default"]);
+const axios = __nccwpck_require__(8757);
 
 const main = async () => {
     try {
@@ -15765,15 +15765,15 @@ const main = async () => {
         const payload = {
           attachments: [{text: message, color: 'green'}]
         };
-        const options = {
-          method: 'post',
-          baseURL: slackWebHookUrl,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-          },
-          data: payload,
-        };
-        await axios.request(options);
+        // const options = {
+        //   method: 'post',
+        //   baseURL: slackWebHookUrl,
+        //   headers: {
+        //     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        //   },
+        //   data: payload,
+        // };
+        await axios.post(slackWebHookUrl, JSON.stringify(payload));
     } catch (error) {
         core.setFailed(error.stack);
     }

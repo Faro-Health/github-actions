@@ -2,7 +2,7 @@
 
 const core = require('@actions/core');
 const github = require('@actions/github');
-const axios = require('axios').default;
+const axios = require('axios');
 
 const main = async () => {
     try {
@@ -28,15 +28,15 @@ const main = async () => {
         const payload = {
           attachments: [{text: message, color: 'green'}]
         };
-        const options = {
-          method: 'post',
-          baseURL: slackWebHookUrl,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-          },
-          data: payload,
-        };
-        await axios.request(options);
+        // const options = {
+        //   method: 'post',
+        //   baseURL: slackWebHookUrl,
+        //   headers: {
+        //     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        //   },
+        //   data: payload,
+        // };
+        await axios.post(slackWebHookUrl, JSON.stringify(payload));
     } catch (error) {
         core.setFailed(error.stack);
     }
