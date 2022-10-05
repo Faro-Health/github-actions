@@ -10,13 +10,13 @@ const main = async () => {
 
         const octokit = new github.getOctokit(token);
 
-        const runs = await octokit.rest.actions.listWorkflowRunsForRepo({
+        const { data } = await octokit.rest.actions.listWorkflowRunsForRepo({
             owner: owner,
             repo: repo,
             per_page: 1,
             page: 1,
         });
-        console.log(runs);
+        console.log(data.workflow_runs);
 
     } catch (error) {
         core.setFailed(error.message);
