@@ -15831,6 +15831,7 @@ const main = async () => {
             }
         }
         const payload = conclusion === CONCLUSION_FAILURE ? getFailedPayload(curRun) : getSuccessPayload(curRun);
+console.log('payload:', payload);
         await axios.post(slackWebHookUrl, JSON.stringify(payload));
     } catch (error) {
         core.setFailed(error.stack);
