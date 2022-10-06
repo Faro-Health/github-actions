@@ -15744,6 +15744,28 @@ const axios = __nccwpck_require__(8757);
 const CONCLUSION_SUCCESS = 'success';
 const CONCLUSION_FAILURE = 'failure';
 
+/**
+ * Return diff of two dates in human readable format
+ */
+function timeDiff(startDate, endDate) {
+    const seconds = Math.trunc(new Date(endDate).getTime() / 1000) - Math.trunc(new Date(startDate).getTime() / 1000);
+    const levels = [
+        [Math.floor(seconds / 31536000), 'year'],
+        [Math.floor((seconds % 31536000) / 86400), 'day'],
+        [Math.floor(((seconds % 31536000) % 86400) / 3600), 'hour'],
+        [Math.floor((((seconds % 31536000) % 86400) % 3600) / 60), 'minute'],
+        [(((seconds % 31536000) % 86400) % 3600) % 60, 'second'],
+    ];
+    const parts = [];
+    for (const [num, val] of levels) {
+        if (num === 0) continue;
+        const value = num > 1 ? val + 's': val;
+        parts.push(`${num} ${value}`);
+    }
+    return parts.join(' ');
+}
+
+
 function getFailedPayload(run) {
     return {
         text: `Build <${run.html_url}|'${run.display_title}'> failed`,
@@ -15768,7 +15790,7 @@ function getFailedPayload(run) {
                 },
                 {
                     title: "Duration",
-                    value: "20 seconds", // calc updated_at - created_at
+                    value: timeDiff(run.created_at, run.updated_at),
                     short: true,
                 },
             ],
@@ -15800,7 +15822,7 @@ function getSuccessPayload(run) {
                 },
                 {
                     title: "Duration",
-                    value: "20 seconds", // calc updated_at - created_at
+                    value: timeDiff(run.created_at, run.updated_at),
                     short: true,
                 },
             ],
