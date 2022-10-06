@@ -15753,7 +15753,7 @@ function getFailedPayload(run) {
             fields: [
                 {
                     title: "Repository",
-                    value: `<${repository.html_url}|${repository.name}>`,
+                    value: `<${run.repository.html_url}|${run.repository.name}>`,
                     short: true,
                 },
                 {
@@ -15763,7 +15763,7 @@ function getFailedPayload(run) {
                 },
                 {
                     title: "Requested for",
-                    value: `<${triggering_actor.html_url}|${triggering_actor.login}>`,
+                    value: `<${run.triggering_actor.html_url}|${run.triggering_actor.login}>`,
                     short: true,
                 },
                 {
@@ -15785,7 +15785,7 @@ function getSuccessPayload(run) {
             fields: [
                 {
                     title: "Repository",
-                    value: `<${repository.html_url}|${repository.name}>`,
+                    value: `<${run.repository.html_url}|${run.repository.name}>`,
                     short: true,
                 },
                 {
@@ -15795,7 +15795,7 @@ function getSuccessPayload(run) {
                 },
                 {
                     title: "Requested for",
-                    value: `<${triggering_actor.html_url}|${triggering_actor.login}>`,
+                    value: `<${run.triggering_actor.html_url}|${run.triggering_actor.login}>`,
                     short: true,
                 },
                 {
