@@ -4,9 +4,6 @@ inputs:
   repository:
     description: 'Name of the repository'
     required: true
-  message:
-    description: 'Message to show'
-    required: true
   conclusion:
     description: 'Conclusion'
     required: true
