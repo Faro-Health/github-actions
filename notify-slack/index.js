@@ -66,7 +66,7 @@ function getSuccessPayload(run) {
         text: `Build <${run.html_url}|'${run.display_title}'> succeeded`,
         icon_emoji: ':rocket:',
         attachments: [{
-            color: "#00FF00",
+            color: "#488F5F",
             fields: [
                 {
                     title: "Repository",
