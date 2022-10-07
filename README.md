@@ -99,6 +99,8 @@ This github action notifies slack users about successful or failed builds. Add a
 4. Pick a channel that the app will post to, then click Authorize.
 5. Store Incoming Webhook URL in the Github repository or project secrets.
 
+For more info go to [Slack API::Create an Incoming Webhook](https://api.slack.com/messaging/webhooks#create_a_webhook).
+
 ### Action inputs
 | Name              | Description                                          | Required |
 | ----------------- | ---------------------------------------------------- | -------- |
