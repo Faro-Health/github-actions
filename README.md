@@ -72,3 +72,5 @@ That's it! Once this is done, the action will be triggered on every push to mast
 | `password `       | Your Azure password                                  | true     |    -     |
 | `email`           | Your Azure email                                     | true     |    -     |
 | `npmrc-path`      | Path to .npmrc file                                  | false    | ~/.npmrc |
+
+## notify-slack

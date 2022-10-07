@@ -15745,7 +15745,14 @@ const CONCLUSION_SUCCESS = 'success';
 const CONCLUSION_FAILURE = 'failure';
 
 /**
- * Return diff of two dates in human readable format
+ * Return diff of two dates in human readable format.
+ * Example:
+ *  timeDiff('2022-10-01T12:18:00.706Z', '2022-10-07T07:35:35.706Z')
+ *  returns "5 days 19 hours 17 minutes 35 seconds"
+ *
+ * @param startDate Date in ISO format
+ * @param endDate Date in ISO format
+ * @returns Time diff in human readable format
  */
 function timeDiff(startDate, endDate) {
     const seconds = Math.trunc(new Date(endDate).getTime() / 1000) - Math.trunc(new Date(startDate).getTime() / 1000);
@@ -15765,45 +15772,24 @@ function timeDiff(startDate, endDate) {
     return parts.join(' ');
 }
 
-
-function getFailedPayload(run) {
+/**
+ * Get slack message API payload for given github run.
+ *
+ * @param {Object} run Github run object.
+ * @returns Slack message API payload object
+ */
+function getPayload(run, conclusion) {
+    const text = conclusion === CONCLUSION_FAILURE
+        ? `Build <${run.html_url}|'${run.display_title}'> failed`
+        : `Build <${run.html_url}|'${run.display_title}'> succeeded`;
+    const color = conclusion === CONCLUSION_FAILURE
+        ? "#FF0000"
+        : "#008000";
     return {
-        text: `Build <${run.html_url}|'${run.display_title}'> failed`,
+        text: text,
         icon_emoji: ':rocket:',
         attachments: [{
-            color: "#FF0000",
-            fields: [
-                {
-                    title: "Repository",
-                    value: `<${run.repository.html_url}|${run.repository.name}>`,
-                    short: true,
-                },
-                {
-                    title: "Branch",
-                    value: run.head_branch,
-                    short: true,
-                },
-                {
-                    title: "Requested for",
-                    value: `<${run.triggering_actor.html_url}|${run.triggering_actor.login}>`,
-                    short: true,
-                },
-                {
-                    title: "Duration",
-                    value: timeDiff(run.created_at, run.updated_at),
-                    short: true,
-                },
-            ],
-        }],
-    };
-}
-
-function getSuccessPayload(run) {
-    return {
-        text: `Build <${run.html_url}|'${run.display_title}'> succeeded`,
-        icon_emoji: ':rocket:',
-        attachments: [{
-            color: "#008000",
+            color: color,
             fields: [
                 {
                     title: "Repository",
@@ -15852,8 +15838,7 @@ const main = async () => {
                 return;
             }
         }
-        const payload = conclusion === CONCLUSION_FAILURE ? getFailedPayload(curRun) : getSuccessPayload(curRun);
-        await axios.post(slackWebHookUrl, JSON.stringify(payload));
+        await axios.post(slackWebHookUrl, JSON.stringify(getPayload(curRun, conclusion)));
     } catch (error) {
         core.setFailed(error.stack);
     }
