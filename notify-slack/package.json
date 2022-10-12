@@ -1,14 +1,14 @@
 {
   "name": "notify-slack",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Notify slack channel",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "ncc build index.js -o dist",
+    "build": "tsc && ncc build build/main.js -m -o dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "farohealth",
   "license": "ISC",
   "dependencies": {
     "@actions/core": "^1.10.0",
@@ -16,6 +16,7 @@
     "axios": "^1.0.0"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.34.0"
+    "@vercel/ncc": "^0.34.0",
+    "typescript": "^4.8.4"
   }
 }

@@ -1,8 +1,6 @@
-'use strict';
-
-const core = require('@actions/core');
-const github = require('@actions/github');
-const axios = require('axios');
+import { getInput, setFailed } from '@actions/core';
+import { getOctokit } from '@actions/github';
+import * as axios from 'axios';
 
 const CONCLUSION_SUCCESS = 'success';
 const CONCLUSION_FAILURE = 'failure';
@@ -13,11 +11,11 @@ const CONCLUSION_FAILURE = 'failure';
  *  timeDiff('2022-10-01T12:18:00.706Z', '2022-10-07T07:35:35.706Z')
  *  returns "5 days 19 hours 17 minutes 35 seconds"
  *
- * @param startDate Date in ISO format
- * @param endDate Date in ISO format
- * @returns Time diff in human readable format
+ * @param {String} startDate Date in ISO format
+ * @param {String} endDate Date in ISO format
+ * @returns {String} Time diff in human readable format
  */
-function timeDiff(startDate, endDate) {
+function timeDiff(startDate: string, endDate: string): string {
     const seconds = Math.trunc(new Date(endDate).getTime() / 1000) - Math.trunc(new Date(startDate).getTime() / 1000);
     const levels = [
         [Math.floor(seconds / 31536000), 'year'],
@@ -26,7 +24,7 @@ function timeDiff(startDate, endDate) {
         [Math.floor((((seconds % 31536000) % 86400) % 3600) / 60), 'minute'],
         [(((seconds % 31536000) % 86400) % 3600) % 60, 'second'],
     ];
-    const parts = [];
+    const parts: string[] = [];
     for (const [num, val] of levels) {
         if (num === 0) continue;
         const value = num > 1 ? val + 's': val;
@@ -39,9 +37,9 @@ function timeDiff(startDate, endDate) {
  * Get slack message API payload for given github run.
  *
  * @param {Object} run Github run object.
- * @returns Slack message API payload object
+ * @returns {Object} Slack message API payload object
  */
-function getPayload(run, conclusion) {
+function getPayload(run: any, conclusion: string): any {
     const text = conclusion === CONCLUSION_FAILURE
         ? `Build <${run.html_url}|'${run.display_title}'> failed`
         : `Build <${run.html_url}|'${run.display_title}'> succeeded`;
@@ -81,12 +79,12 @@ function getPayload(run, conclusion) {
 
 const main = async () => {
     try {
-        const repository = core.getInput('repository', { required: true });
-        const token = core.getInput('token', { required: true });
-        const conclusion = core.getInput('conclusion', { required: true });
-        const slackWebHookUrl = core.getInput('slackWebHookUrl', { required: true });
+        const repository = getInput('repository', { required: true });
+        const token = getInput('token', { required: true });
+        const conclusion = getInput('conclusion', { required: true });
+        const slackWebHookUrl = getInput('slackWebHookUrl', { required: true });
 
-        const octokit = new github.getOctokit(token);
+        const octokit = getOctokit(token);
         const [owner, repo] = repository.split('/');
 
         const { data } = await octokit.rest.actions.listWorkflowRunsForRepo({
@@ -101,9 +99,10 @@ const main = async () => {
                 return;
             }
         }
-        await axios.post(slackWebHookUrl, JSON.stringify(getPayload(curRun, conclusion)));
+        const axiosClient = axios.default;
+        await axiosClient.post(slackWebHookUrl, JSON.stringify(getPayload(curRun, conclusion)));
     } catch (error) {
-        core.setFailed(error.stack);
+        setFailed((error as Error).message);
     }
 }
 main();
