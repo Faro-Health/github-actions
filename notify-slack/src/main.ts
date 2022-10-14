@@ -1,5 +1,5 @@
 import { getInput, setFailed } from '@actions/core';
-import { getOctokit } from '@actions/github';
+import { getOctokit, context } from '@actions/github';
 import * as axios from 'axios';
 
 const CONCLUSION_SUCCESS = 'success';
@@ -79,17 +79,21 @@ function getPayload(run: any, conclusion: string): any {
 
 const main = async () => {
     try {
-        const repository = getInput('repository', { required: true });
         const token = getInput('token', { required: true });
         const conclusion = getInput('conclusion', { required: true });
         const slackWebHookUrl = getInput('slackWebHookUrl', { required: true });
 
         const octokit = getOctokit(token);
-        const [owner, repo] = repository.split('/');
-
+        // retrieve current run
+        const run = await octokit.rest.actions.getWorkflowRun({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId,
+        });
         const { data } = await octokit.rest.actions.listWorkflowRunsForRepo({
-            owner: owner,
-            repo: repo,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            branch: run.data.head_branch || undefined,
             per_page: 2,
             page: 1,
         });

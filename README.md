@@ -86,25 +86,23 @@ This github action notifies slack users about successful or failed builds. Add a
       - name: Notify slack
         uses: Faro-Health/github-actions/notify-slack@master
         with:
-          repository: ${{ github.repository }}
           token: ${{ github.token }}
           conclusion: ${{ needs.build.result }}
           slackWebHookUrl: ${{ secrets.SLACK_WEBHOOK }}
 ```
 
 ### How to setup
+For more info please visit [Slack API::Create an Incoming Webhook](https://api.slack.com/messaging/webhooks#create_a_webhook).
+
 1. Create a new Slack app in the workspace where you want to post messages.
 2. From the Features page, toggle Activate Incoming Webhooks on.
 3. Click Add New Webhook to Workspace.
 4. Pick a channel that the app will post to, then click Authorize.
 5. Store Incoming Webhook URL in the Github repository or project secrets.
 
-For more info go to [Slack API::Create an Incoming Webhook](https://api.slack.com/messaging/webhooks#create_a_webhook).
-
 ### Action inputs
 | Name              | Description                                          | Required |
 | ----------------- | ---------------------------------------------------- | -------- |
-| `repository`      | Github repository full name, "account/repo"          | true     |
 | `token`           | Github token                                         | true     |
 | `conclusion`      | Build job conclusion, "success" or "failure"         | true     |
 | `slackWebHookUrl `| Slack Incoming Webhook URL                           | true     |
