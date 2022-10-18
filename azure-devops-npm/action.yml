@@ -25,7 +25,7 @@ runs:
   steps:
     - id: set_vars
       run: |
-        echo "::set-output name=azure_url::$(echo 'pkgs.dev.azure.com/${{ inputs.organization }}/_packaging/${{ inputs.registry }}/npm')"
+        echo "azure_url=pkgs.dev.azure.com/${{ inputs.organization }}/_packaging/${{ inputs.registry }}/npm" >> $GITHUB_OUTPUT
       shell: bash
     - run: |
         echo "registry=https://${{ steps.set_vars.outputs.azure_url }}/registry/" > ${{ inputs.npmrc-path }}
