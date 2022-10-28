@@ -9,13 +9,15 @@ inputs:
     required: true
   user:
     description: "Your Azure user"
-    required: true
+    required: false
+    default: githubaction
   password:
     description: "Your Azure password"
     required: true
   email:
     description: "Your Azure email"
-    required: true
+    required: false
+    default: githubaction@farohealth.com
   npmrc-path:
     description: "Path to the file"
     required: false
