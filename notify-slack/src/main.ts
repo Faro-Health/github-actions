@@ -46,9 +46,12 @@ function getPayload(run: any, conclusion: string): any {
     const color = conclusion === CONCLUSION_FAILURE
         ? "#FF0000"
         : "#008000";
+    const icon = conclusion === CONCLUSION_FAILURE
+        ? ":octagonal_sign:"
+        : ":white_check_mark:";
     return {
         text: text,
-        icon_emoji: ':rocket:',
+        icon_emoji: icon,
         attachments: [{
             color: color,
             fields: [
