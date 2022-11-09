@@ -11,6 +11,10 @@ on:
         required: true
       REGISTRY_PASSWORD:
         required: true
+      AZURE_NPM_TOKEN:
+        required: true
+      AZURE_CREDENTIALS:
+        required: true
 
 env:
   APPINSIGHTS_ENABLE: false
