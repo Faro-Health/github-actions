@@ -7,7 +7,7 @@ on:
     secrets:
       REGISTRY_LOGIN_SERVER:
         required: true
-        ype: string
+        type: string
       REGISTRY_USERNAME:
         required: true
         type: string
