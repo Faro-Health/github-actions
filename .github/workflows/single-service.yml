@@ -4,6 +4,10 @@ on:
       TARGET_IMAGE_NAME:
         required: true
         type: string
+      USE_DB:
+        required: false
+        type: boolean
+        default: false
     secrets:
       REGISTRY_LOGIN_SERVER:
         required: true
@@ -16,6 +20,7 @@ on:
       AZURE_CREDENTIALS:
         required: true
 
+# https://stackoverflow.com/questions/73305126/passing-env-variable-inputs-to-a-reusable-workflow
 env:
   APPINSIGHTS_ENABLE: false
   AUTH_ENABLE: false
@@ -42,8 +47,8 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Set variables
-        id: set_vars
+      - name: Set DB env variables
+        if: ${{ inputs.USE_DB }}
         run: |
           if [ ${{ github.ref }} == 'refs/heads/release/*' ]; then
             echo "DBCONFIG_DATABASE=faro_db_rc_devops" >> $GITHUB_ENV
