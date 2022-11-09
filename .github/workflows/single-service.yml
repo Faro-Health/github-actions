@@ -95,7 +95,7 @@ jobs:
       - name: 'Build and push docker image'
         run: |
           cp ~/.npmrc `pwd`/docker/.npmrc
-          docker build ./docker -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ inputs.TARGET_IMAGE_NAME }}:${{ env.VERSION }} -t  ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TARGET_IMAGE_NAME }}:latest
+          docker build ./docker -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ inputs.TARGET_IMAGE_NAME }}:${{ env.VERSION }} -t  ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ inputs.TARGET_IMAGE_NAME }}:latest
           docker push -a ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ inputs.TARGET_IMAGE_NAME }}
       #      - name: Deploy to Azure Web App for Container to RC'
       #        if: github.ref == 'refs/heads/release/*'
