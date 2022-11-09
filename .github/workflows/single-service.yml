@@ -4,16 +4,16 @@ on:
       TARGET_IMAGE_NAME:
         required: true
         type: string
-      secrets:
-        REGISTRY_LOGIN_SERVER:
-          required: true
-          ype: string
-        REGISTRY_USERNAME:
-          required: true
-          type: string
-        REGISTRY_PASSWORD:
-          required: true
-          type: string
+    secrets:
+      REGISTRY_LOGIN_SERVER:
+        required: true
+        ype: string
+      REGISTRY_USERNAME:
+        required: true
+        type: string
+      REGISTRY_PASSWORD:
+        required: true
+        type: string
 
 env:
   APPINSIGHTS_ENABLE: false
