@@ -7,13 +7,10 @@ on:
     secrets:
       REGISTRY_LOGIN_SERVER:
         required: true
-        type: string
       REGISTRY_USERNAME:
         required: true
-        type: string
       REGISTRY_PASSWORD:
         required: true
-        type: string
 
 env:
   APPINSIGHTS_ENABLE: false
