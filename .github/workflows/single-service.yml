@@ -1,7 +1,7 @@
 on:
   workflow_call:
     inputs:
-      TARGET_IMAGE_NAMEh:
+      TARGET_IMAGE_NAME:
         required: true
         type: string
       secrets:
@@ -14,6 +14,15 @@ on:
         REGISTRY_PASSWORD:
           required: true
           type: string
+
+env:
+  APPINSIGHTS_ENABLE: false
+  AUTH_ENABLE: false
+  DBCONFIG_HOST: faro-db-dev-01.postgres.database.azure.com
+  DBCONFIG_SSL_ENABLED: true
+  DBCONFIG_SSL_REJECTUNAUTHORIZED: true
+  PORT: 8080
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,6 +41,18 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Set variables
+        id: set_vars
+        run: |
+          if [ ${{ github.ref }} == 'refs/heads/release/*' ]; then
+            echo "DBCONFIG_DATABASE=faro_db_rc_devops" >> $GITHUB_ENV
+            (echo -n 'DBCONFIG_USER='; az keyvault secret show --vault-name faro-dev-vault-01 --name devops-rc-db-username --query "value" | sed 's/"//g') >> $GITHUB_ENV
+            (echo -n 'DBCONFIG_PASSWORD='; az keyvault secret show --vault-name faro-dev-vault-01 --name devops-rc-db-password --query "value" | sed 's/"//g') >> $GITHUB_ENV
+          else
+            echo "DBCONFIG_DATABASE=faro_db_devops" >> $GITHUB_ENV
+            (echo -n 'DBCONFIG_USER='; az keyvault secret show --vault-name faro-dev-vault-01 --name devops-db-username --query "value" | sed 's/"//g') >> $GITHUB_ENV
+            (echo -n 'DBCONFIG_PASSWORD='; az keyvault secret show --vault-name faro-dev-vault-01 --name devops-db-password --query "value" | sed 's/"//g') >> $GITHUB_ENV
+          fi
       - run: npm ci
       - run: npm run lint
       - run: npm run build
@@ -97,3 +118,4 @@ jobs:
 #        with:
 #          conclusion: ${{ needs.build.result }}
 #          slackWebHookUrl: ${{ secrets.SLACK_WEBHOOK_URL }}
+
