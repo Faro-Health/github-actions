@@ -95,20 +95,20 @@ jobs:
       - name: 'Build and push docker image'
         run: |
           cp ~/.npmrc `pwd`/docker/.npmrc
-          docker build ./docker -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TARGET_IMAGE_NAME }}:${{ env.VERSION }} -t  ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TARGET_IMAGE_NAME }}:latest
-          docker push -a ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TARGET_IMAGE_NAME }}
+          docker build ./docker -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ inputs.TARGET_IMAGE_NAME }}:${{ env.VERSION }} -t  ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TARGET_IMAGE_NAME }}:latest
+          docker push -a ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ inputs.TARGET_IMAGE_NAME }}
       #      - name: Deploy to Azure Web App for Container to RC'
       #        if: github.ref == 'refs/heads/release/*'
       #        uses: azure/webapps-deploy@v2
       #        with:
       #          app-name: faro-rc-user-management-app-01
-      #          images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TARGET_IMAGE_NAME }}:${{ env.VERSION }}
+      #          images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ inputs.TARGET_IMAGE_NAME }}:${{ env.VERSION }}
       - name: Deploy to Azure Web App for Container to CI'
         if: github.ref == 'refs/heads/develop'
         uses: azure/webapps-deploy@v2
         with:
           app-name: faro-ci-user-management-app-01
-          images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TARGET_IMAGE_NAME }}:${{ env.VERSION }}
+          images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ inputs.TARGET_IMAGE_NAME }}:${{ env.VERSION }}
 #  notify-slack:
 #    runs-on: ubuntu-latest
 #    if: success() || failure()
