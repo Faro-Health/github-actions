@@ -4,15 +4,13 @@ description: 'Lint, build, test and generate coverage report'
 runs:
   using: "composite"
   steps:
-    - run: ls -al
-      shell: bash
     - run: npm ci
       shell: bash
     - run: npm run lint
       shell: bash
     - run: npm run build
       shell: bash
-    - run: npm run coverage:c
+    - run: npm run coverage:ci
       shell: bash
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
