@@ -4,9 +4,8 @@ description: 'Lint, build, test and generate coverage report'
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
+    - run: ls -al
+      shell: bash
     - run: npm ci
       shell: bash
     - run: npm run lint
