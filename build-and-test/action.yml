@@ -8,9 +8,13 @@ runs:
       with:
         node-version: 16
     - run: npm ci
+      shell: bash
     - run: npm run lint
+      shell: bash
     - run: npm run build
-    - run: npm run coverage:ci
+      shell: bash
+    - run: npm run coverage:c
+      shell: bash
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
