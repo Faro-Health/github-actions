@@ -1,0 +1,15 @@
+name: 'Version and publish'
+description: 'Version and publish'
+
+runs:
+  using: "composite"
+  steps:
+    - name: git set your account's default identity.
+      run: |
+        git config --global user.email "ci.build@farohealth.com"
+        git config --global user.name "CI Build"
+    - run: npm run prerelease:version
+    - run: git pull --ff --no-edit && git push
+    - name: npm publish
+      run: |
+        npm publish

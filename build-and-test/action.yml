@@ -1,0 +1,24 @@
+name: 'Build and test'
+description: 'Lint, build, test and generate coverage report'
+
+runs:
+  using: "composite"
+  steps:
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - run: npm run coverage:ci
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          junit_files: test-output/test-results.xml
+      - name: Publish Cobertura coverage results
+        uses: 5monkeys/cobertura-action@master
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        with:
+          path: coverage-report/cobertura-coverage.xml
+          report_name: Code Coverage
+          show_line: true
+          fail_below_threshold: false
+          minimum_coverage: 50
