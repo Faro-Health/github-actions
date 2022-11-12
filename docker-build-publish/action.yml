@@ -24,7 +24,7 @@ runs:
         login-server: ${{ inputs.registry_login_server }}
         username: ${{ inputs.registry_username }}
         password: ${{ inputs.registry_password }}
-    - id: Initialize VERSION env
+    - id: init-version
       run: echo "VERSION=${{ inputs.version }}" >> $GITHUB_ENV
       shell: bash
     - name: 'Build and push docker image'
