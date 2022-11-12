@@ -2,17 +2,18 @@ name: 'Docker build and publish'
 description: 'tbd'
 
 inputs:
-  inputs:
-    target_image_name:
-      required: true
-    registry_login_server:
-      required: true
-    registry_username:
-      required: true
-    registry_password:
-      required: true
-    app-name:
-      required: true
+  version:
+    required: true
+  target_image_name:
+    required: true
+  registry_login_server:
+    required: true
+  registry_username:
+    required: true
+  registry_password:
+    required: true
+  app-name:
+    required: true
 
 runs:
   using: "composite"
