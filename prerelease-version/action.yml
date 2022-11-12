@@ -19,5 +19,5 @@ runs:
     - run: git pull --ff --no-edit && git push
       shell: bash
     - id: prerelease-version
-      run:   echo "version=$(node -p "require('./package.json').version")" >> GITHUB_OUTPUT
+      run:   echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
       shell: bash
