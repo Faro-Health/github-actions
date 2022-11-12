@@ -36,5 +36,5 @@ runs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ inputs.app-name }}
-        images: ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:${{ env.version }}
+        images: ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:${{ inputs.version }}
 
