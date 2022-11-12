@@ -27,6 +27,7 @@ runs:
         cp ~/.npmrc `pwd`/docker/.npmrc
         docker build ./docker -t ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:${{ inputs.version }} -t  ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:latest
         docker push -a ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}
+      shell: bash
     - name: Deploy to Azure Web App for Container to RC'
       if: github.ref == 'refs/heads/release/*'
       uses: azure/webapps-deploy@v2

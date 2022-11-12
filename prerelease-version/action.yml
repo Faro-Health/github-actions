@@ -13,8 +13,11 @@ runs:
       run: |
         git config --global user.email "ci.build@farohealth.com"
         git config --global user.name "CI Build"
+      shell: bash
     - run: npm run prerelease:version
+      shell: bash
     - run: git pull --ff --no-edit && git push
+      shell: bash
     - id: prerelease-version
       run:   echo "version=$(node -p "require('./package.json').version")" >> GITHUB_OUTPUT
       shell: bash
