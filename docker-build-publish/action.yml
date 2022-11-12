@@ -30,7 +30,7 @@ runs:
         docker build ./docker -t ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:${{ inputs.version }} -t  ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:latest
         docker push -a ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}
       env:
-        VERSION: ${{ inputs.version }
+        VERSION: ${{ inputs.version }}
       shell: bash
     - name: Deploy to Azure Web App for Container'
       uses: azure/webapps-deploy@v2
