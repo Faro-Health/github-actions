@@ -1,0 +1,42 @@
+name: 'Docker build and publish'
+description: 'tbd'
+
+inputs:
+  inputs:
+    target_image_name:
+      required: true
+      type: string
+    registry_login_server:
+      required: true
+    registry_username:
+      required: true
+    registry_password:
+      required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: 'Connect to docker registry'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ inputs.registry_login_server }}
+        username: ${{ inputs.registry_username }}
+        password: ${{ inputs.registry_password }}
+    - name: 'Build and push docker image'
+      run: |
+        cp ~/.npmrc `pwd`/docker/.npmrc
+        docker build ./docker -t ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:${{ inputs.version }} -t  ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:latest
+        docker push -a ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}
+    - name: Deploy to Azure Web App for Container to RC'
+      if: github.ref == 'refs/heads/release/*'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: faro-rc-user-management-app-01
+        images: ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:${{ env.version }}
+    - name: Deploy to Azure Web App for Container to CI'
+      if: github.ref == 'refs/heads/develop'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: faro-ci-user-management-app-01
+        images: ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:${{ env.version }}
+

@@ -1,6 +1,11 @@
 name: 'Version and publish'
 description: 'Version and publish'
 
+outputs:
+  version:
+    description: "Prerelease version"
+    value: ${{ steps.prerelease-version.outputs.version }}
+
 runs:
   using: "composite"
   steps:
@@ -10,6 +15,6 @@ runs:
         git config --global user.name "CI Build"
     - run: npm run prerelease:version
     - run: git pull --ff --no-edit && git push
-    - name: npm publish
-      run: |
-        npm publish
+    - id: prerelease-version
+      run:   echo "version=$(node -p "require('./package.json').version")" >> GITHUB_OUTPUT
+      shell: bash

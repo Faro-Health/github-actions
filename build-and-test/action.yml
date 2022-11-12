@@ -1,6 +1,11 @@
 name: 'Build and test'
 description: 'Lint, build, test and generate coverage report'
 
+inputs:
+  minimum_coverage:
+    required: false
+    default: 50
+    type: string
 runs:
   using: "composite"
   steps:
@@ -25,4 +30,4 @@ runs:
         report_name: Code Coverage
         show_line: true
         fail_below_threshold: false
-        minimum_coverage: 50
+        minimum_coverage: ${{ inputs.minimum_coverage }}
