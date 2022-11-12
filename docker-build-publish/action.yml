@@ -1,5 +1,5 @@
 name: 'Docker build and publish'
-description: 'tbd'
+description: 'Docker build and publish'
 
 inputs:
   version:
@@ -24,6 +24,9 @@ runs:
         login-server: ${{ inputs.registry_login_server }}
         username: ${{ inputs.registry_username }}
         password: ${{ inputs.registry_password }}
+    - id: Initialize VERSION env
+      run: echo "VERSION=${{ inputs.version }}" >> $GITHUB_ENV
+      shell: bash
     - name: 'Build and push docker image'
       run: |
         cp ~/.npmrc `pwd`/docker/.npmrc
