@@ -3,7 +3,7 @@ description: 'Version and publish'
 
 outputs:
   version:
-    description: "Prerelease version"
+    description: "Newly created prerelease version"
     value: ${{ steps.prerelease-version.outputs.version }}
 
 runs:

@@ -1,0 +1,24 @@
+name: 'Set up nmp and node'
+description: 'Set up nmp and node'
+
+inputs:
+  node-version:
+    required: false
+    default: 16
+    description: 'Node version'
+  npm-token:
+    required: true
+    description: 'Token to connect to private npm artifactory'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+    - name: Azure DevOps NPM
+      uses: Faro-Health/github-actions/azure-devops-npm@master
+      with:
+        organization: farohealth
+        registry: faro-common-libs
+        password: ${{ inputs.npm-token }}

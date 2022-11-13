@@ -4,16 +4,22 @@ description: 'Docker build and publish'
 inputs:
   version:
     required: true
-  target_image_name:
+    description: 'A docker version to build'
+  target-image-name:
     required: true
-  registry_login_server:
+    description: 'A docker image name'
+  registry-login-server:
     required: true
-  registry_username:
+    description:  'Docker registry server'
+  registry-username:
     required: true
-  registry_password:
+    description:  'Docker registry server user name'
+  registry-password:
     required: true
+    description:  'Docker registry server user password'
   app-name:
     required: true
+    description:  'Azure app server to deploy to'
 
 runs:
   using: "composite"
@@ -21,14 +27,14 @@ runs:
     - name: 'Connect to docker registry'
       uses: azure/docker-login@v1
       with:
-        login-server: ${{ inputs.registry_login_server }}
-        username: ${{ inputs.registry_username }}
-        password: ${{ inputs.registry_password }}
+        login-server: ${{ inputs.registry-login-server }}
+        username: ${{ inputs.registry-username }}
+        password: ${{ inputs.registry-password }}
     - name: 'Build and push docker image'
       run: |
         cp ~/.npmrc `pwd`/docker/.npmrc
-        docker build ./docker -t ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:${{ inputs.version }} -t  ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:latest
-        docker push -a ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}
+        docker build ./docker -t ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:${{ inputs.version }} -t  ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:latest
+        docker push -a ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}
       env:
         VERSION: ${{ inputs.version }}
       shell: bash
@@ -36,5 +42,5 @@ runs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ inputs.app-name }}
-        images: ${{ inputs.registry_login_server }}/${{ inputs.target_image_name }}:${{ inputs.version }}
+        images: ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:${{ inputs.version }}
 

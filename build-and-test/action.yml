@@ -2,10 +2,19 @@ name: 'Build and test'
 description: 'Lint, build, test and generate coverage report'
 
 inputs:
-  minimum_coverage:
+  minimum-coverage:
     required: false
     default: 50
-    type: string
+    description: 'The minimum allowed coverage percentage as an integer'
+  test-report-path:
+    required: false
+    default: ''
+    description: 'The path to the test report. Must include "/" at the end'
+  coverage-report-path:
+    required: false
+    default: ''
+    description: 'The path to the coverage report. Must include "/" at the end'
+
 runs:
   using: "composite"
   steps:
@@ -21,13 +30,13 @@ runs:
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
-        junit_files: test-output/test-results.xml
+        junit_files: ${{inputs.test-report-path}}test-results.xml
     - name: Publish Cobertura coverage results
       uses: 5monkeys/cobertura-action@master
       if: ${{ github.event_name != 'workflow_dispatch' }}
       with:
-        path: coverage-report/cobertura-coverage.xml
+        path: ${{inputs.coverage-report-path}}cobertura-coverage.xml
         report_name: Code Coverage
         show_line: true
         fail_below_threshold: false
-        minimum_coverage: ${{ inputs.minimum_coverage }}
+        minimum_coverage: ${{ inputs.minimum-coverage }}
