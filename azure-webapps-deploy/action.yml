@@ -1,0 +1,29 @@
+name: 'Azure web app deploy'
+description: 'Azure web app deploy'
+
+inputs:
+  app-name:
+    required: true
+    description: 'Azure app server name to deploy to'
+  azure-credentials:
+    required: true
+    description: 'Azure credentials'
+  target-image-name:
+    required: true
+    description: 'A docker image name'
+  version:
+    required: true
+    description: 'A docker version to deploy'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: azure/login@v1
+      with:
+        creds: ${{ inputs.azure-credentials }}
+    - name: Deploy to Azure Web App for Container'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ inputs.app-name }}
+        images: ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:${{ inputs.version }}
+
