@@ -16,6 +16,7 @@ inputs:
     description: 'A docker version to deploy'
   registry-login-server:
     required: true
+    description:  'Docker registry server'
 
 runs:
   using: "composite"
