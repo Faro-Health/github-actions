@@ -17,9 +17,6 @@ inputs:
   registry-password:
     required: true
     description:  'Docker registry server user password'
-  app-name:
-    required: true
-    description:  'Azure app server to deploy to'
 
 runs:
   using: "composite"
@@ -38,9 +35,4 @@ runs:
       env:
         VERSION: ${{ inputs.version }}
       shell: bash
-    - name: Deploy to Azure Web App for Container'
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ inputs.app-name }}
-        images: ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:${{ inputs.version }}
 
