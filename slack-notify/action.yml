@@ -2,10 +2,10 @@ name: 'Docker build and publish'
 description: 'Docker build and publish'
 
 inputs:
-  last_status:
+  last-status:
     required: true
     description: 'Workflow last run status: success or failure'
-  current_status:
+  current-status:
     required: true
     description: 'Workflow current run status: success or failure'
   slack-webhook:
@@ -17,7 +17,7 @@ runs:
   steps:
     - name: Build fixed slack message
       uses: rtCamp/action-slack-notify@v2.1.3
-      if: ${{ inputs.current_status == 'success' && inputs.last_status  == 'failure' }}
+      if: ${{ inputs.current-status == 'success' && inputs.last-status  == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
         SLACK_MESSAGE: 'Style check fixed now!'
@@ -26,7 +26,7 @@ runs:
 
     - name: Build faile slack message
       uses: rtCamp/action-slack-notify@v2.1.3
-      if: ${{ inputs.current_status == 'failure' }}
+      if: ${{ inputs.current-status == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
         SLACK_MESSAGE: 'Failure'
