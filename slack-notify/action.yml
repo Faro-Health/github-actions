@@ -20,7 +20,7 @@ runs:
       if: ${{ inputs.current-status == 'success' && inputs.last-status  == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
-        SLACK_MESSAGE: 'Style check fixed now!'
+        SLACK_MESSAGE: 'Fixed now!'
         SLACK_CHANNEL: 'ci-failure'
         SLACK_ICON: ':white_check_mark:'
 
