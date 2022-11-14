@@ -8,12 +8,12 @@ inputs:
     description: 'The minimum allowed coverage percentage as an integer'
   test-report-path:
     required: false
-    default: ''
-    description: 'The path to the test report. Must include "/" at the end'
+    default: 'test-results.xml'
+    description: 'The path to the test report.'
   coverage-report-path:
     required: false
-    default: ''
-    description: 'The path to the coverage report. Must include "/" at the end'
+    default: 'cobertura-coverage.xml'
+    description: 'The path to the coverage report.'
 
 runs:
   using: "composite"
@@ -30,12 +30,12 @@ runs:
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
-        junit_files: ${{inputs.test-report-path}}test-results.xml
+        junit_files: ${{inputs.test-report-path}}
     - name: Publish Cobertura coverage results
       uses: 5monkeys/cobertura-action@master
       if: ${{ github.event_name != 'workflow_dispatch' }}
       with:
-        path: ${{inputs.coverage-report-path}}cobertura-coverage.xml
+        path: ${{inputs.coverage-report-path}}
         report_name: Code Coverage
         show_line: true
         fail_below_threshold: false
