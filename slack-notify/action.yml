@@ -5,9 +5,6 @@ inputs:
   last-status:
     required: true
     description: 'Workflow last run status: success or failure'
-  current-status:
-    required: true
-    description: 'Workflow current run status: success or failure'
   slack-webhook:
     required: true
     description: 'Slack webhook'
@@ -15,9 +12,13 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Get current workflow status
+      uses: martialonline/workflow-status@v3
+      id: workflow-status
+
     - name: Build fixed slack message
       uses: rtCamp/action-slack-notify@v2.1.3
-      if: ${{ inputs.current-status == 'success' && inputs.last-status  == 'failure' }}
+      if: ${{ steps.workflow-status.outputs.status == 'success' && inputs.last-status  == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
         SLACK_MESSAGE: 'Fixed now!'
@@ -26,7 +27,7 @@ runs:
 
     - name: Build faile slack message
       uses: rtCamp/action-slack-notify@v2.1.3
-      if: ${{ inputs.current-status == 'failure' }}
+      if: ${{ steps.workflow-status.outputs.status == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
         SLACK_MESSAGE: 'Failure'
