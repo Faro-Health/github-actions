@@ -14,6 +14,7 @@ runs:
   steps:
     - name: Get current workflow status
       uses: martialonline/workflow-status@v3
+      if: always()
       id: workflow-status
 
     - name: Build fixed slack message
