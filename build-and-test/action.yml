@@ -14,13 +14,17 @@ inputs:
     required: false
     default: 'cobertura-coverage.xml'
     description: 'The path to the coverage report.'
+  working-directory:
+    required: false
+    default: './'
+    description: 'Working directory.'
 
 runs:
   using: "composite"
   steps:
     - run: ls -al
       shell: bash
-      working-directory: test
+      working-directory: ${{inputs.working-directory}}
     - run: npm ci
       shell: bash
     - run: npm run lint
