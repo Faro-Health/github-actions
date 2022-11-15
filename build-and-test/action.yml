@@ -14,32 +14,23 @@ inputs:
     required: false
     default: 'cobertura-coverage.xml'
     description: 'The path to the coverage report.'
-  working-directory:
-    required: false
-    default: ''
-    description: 'Working directory.'
 
 runs:
   using: "composite"
   steps:
     - run: npm ci
       shell: bash
-      working-directory:  ${{inputs.working-directory}}
     - run: npm run lint
       shell: bash
-      working-directory:  ${{inputs.working-directory}}
     - run: npm run build
       shell: bash
-      working-directory:  ${{inputs.working-directory}}
     - run: npm run coverage:ci
       shell: bash
-      working-directory:  ${{inputs.working-directory}}
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
         junit_files: ${{inputs.test-report-path}}
-      working-directory:  ${{inputs.working-directory}}
     - name: Publish Cobertura coverage results
       uses: 5monkeys/cobertura-action@master
       if: ${{ github.event_name != 'workflow_dispatch' }}
@@ -49,4 +40,3 @@ runs:
         show_line: true
         fail_below_threshold: false
         minimum_coverage: ${{ inputs.minimum-coverage }}
-      working-directory:  ${{inputs.working-directory}}
