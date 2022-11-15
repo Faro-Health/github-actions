@@ -1,0 +1,38 @@
+name: 'Version and publish'
+description: 'Version and publish'
+
+inputs:
+  working-directory:
+    required: false
+    default: './'
+    description: 'Working directory.'
+
+outputs:
+  version:
+    description: "Newly created prerelease version"
+    value: ${{ steps.prerelease-version.outputs.version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: git set your account's default identity.
+      run: |
+        git config --global user.email "ci.build@farohealth.com"
+        git config --global user.name "CI Build"
+      shell: bash
+      working-directory: ${{inputs.working-directory}}
+    - run: npm run prerelease:version
+      shell: bash
+      working-directory: ${{inputs.working-directory}}
+    - name: Git commit with message
+    - run: |
+        git add ./shared-ui/package.json ./shared-ui/package-lock.json
+        export GIT_MESSAGE="Upgrade shared-ui to ${{ steps.prerelease-version.outputs.version }} during CI [skip ci]"
+        git commit -m "$GIT_MESSAGE"
+        git pull --ff --no-edit && git push origin
+      shell: bash
+      working-directory: ${{inputs.working-directory}}
+    - id: prerelease-version
+      run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+      shell: bash
+      working-directory: ${{inputs.working-directory}}
