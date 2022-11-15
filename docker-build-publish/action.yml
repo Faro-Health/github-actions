@@ -17,6 +17,10 @@ inputs:
   registry-password:
     required: true
     description:  'Docker registry server user password'
+  working-directory:
+    required: false
+    default: './'
+    description: 'Working directory.'
 
 runs:
   using: "composite"
@@ -35,4 +39,5 @@ runs:
       env:
         VERSION: ${{ inputs.version }}
       shell: bash
+      working-directory: ${{inputs.working-directory}}
 
