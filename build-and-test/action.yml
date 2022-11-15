@@ -27,6 +27,7 @@ runs:
       working-directory: ${{inputs.working-directory}}
     - run: npm ci
       shell: bash
+      working-directory: ${{inputs.working-directory}}
     - run: npm run lint
       shell: bash
     - run: npm run build
