@@ -1,5 +1,5 @@
-name: 'Docker build and publish'
-description: 'Docker build and publish'
+name: 'Slack notification'
+description: 'Slack notification: notifies on failure and when a failure is fixed'
 
 inputs:
   last-status:
