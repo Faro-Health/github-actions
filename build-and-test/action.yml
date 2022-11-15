@@ -20,6 +20,7 @@ runs:
   steps:
     - run: ls -al
       shell: bash
+      working-directory: test
     - run: npm ci
       shell: bash
     - run: npm run lint
