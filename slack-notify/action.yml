@@ -8,6 +8,10 @@ inputs:
   slack-webhook:
     required: true
     description: 'Slack webhook'
+  channel:
+    required: false
+    default: ci-failure
+    description: 'CI Channel'
 
 runs:
   using: "composite"
@@ -18,23 +22,23 @@ runs:
       id: workflow-status
 
     - name: Build fixed slack message
-      uses: rtCamp/action-slack-notify@v2.1.3
+      uses: rtCamp/action-slack-notify@v2.2.0
       if: ${{ steps.workflow-status.outputs.status == 'success' && inputs.last-status  == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
         SLACK_MESSAGE: 'Fixed now!'
-        SLACK_CHANNEL: 'ci-failure'
+        SLACK_CHANNEL: ${{ inputs.channel }}
         SLACK_ICON_EMOJI: ':white_check_mark:'
         SLACK_USERNAME: 'GitHubAction'
         SLACK_COLOR: ${{ steps.workflow-status.outputs.status }}
 
     - name: Build faile slack message
-      uses: rtCamp/action-slack-notify@v2.1.3
+      uses: rtCamp/action-slack-notify@v2.2.0
       if: ${{ steps.workflow-status.outputs.status == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
         SLACK_MESSAGE: 'Failed build'
-        SLACK_CHANNEL: 'ci-failure'
+        SLACK_CHANNEL: ${{ inputs.channel }}
         SLACK_ICON_EMOJI: ':octagonal_sign:'
         SLACK_USERNAME: 'GitHubAction'
         SLACK_COLOR: ${{ steps.workflow-status.outputs.status }}
