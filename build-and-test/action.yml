@@ -42,7 +42,6 @@ runs:
       if: always()
       with:
         junit_files: ${{inputs.test-report-path}}
-      working-directory: ${{inputs.working-directory}}
     - name: Publish Cobertura coverage results
       uses: 5monkeys/cobertura-action@master
       if: ${{ github.event_name != 'workflow_dispatch' }}
@@ -52,4 +51,3 @@ runs:
         show_line: true
         fail_below_threshold: false
         minimum_coverage: ${{ inputs.minimum-coverage }}
-      working-directory: ${{inputs.working-directory}}
