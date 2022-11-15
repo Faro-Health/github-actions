@@ -18,6 +18,7 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - run: ls -al
     - run: npm ci
       shell: bash
     - run: npm run lint
