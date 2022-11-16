@@ -34,7 +34,7 @@ runs:
     - name: 'Build and push docker image'
       run: |
         cp ~/.npmrc `pwd`/docker/.npmrc
-        docker build ./docker -t ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:${{ inputs.version }} -t  ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:latest
+        docker build -t ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:${{ inputs.version }} -t ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:latest ./docker
         docker push -a ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}
       env:
         VERSION: ${{ inputs.version }}
