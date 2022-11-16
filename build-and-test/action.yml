@@ -41,7 +41,7 @@ runs:
         junit_files: ${{inputs.working-directory}}/${{inputs.test-report-path}}
     - name: Publish Cobertura coverage results
       uses: 5monkeys/cobertura-action@master
-      # TODO remove conditional after [Alla to add]
+      # TODO remove conditional after https://farohealth.atlassian.net/browse/PROD-3144
       if: ${{ github.event_name != 'workflow_dispatch' }}
       with:
         path: ${{inputs.working-directory}}/${{inputs.coverage-report-path}}

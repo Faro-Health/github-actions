@@ -2,7 +2,6 @@ name: 'Slack notification'
 description: 'Slack notification: notifies on success->failure and failure->success'
 
 inputs:
-  # TODO include repository/module name in SLACK_MESSAGE
   last-status:
     required: true
     description: 'Workflow last run status: success or failure'
@@ -27,7 +26,7 @@ runs:
       if: ${{ steps.workflow-status.outputs.status == 'success' && inputs.last-status  == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
-        SLACK_MESSAGE: 'Fixed now!'
+        SLACK_MESSAGE: Build is now fixed - ${{ github.event.repository.name }}
         SLACK_CHANNEL: ${{ inputs.channel }}
         SLACK_ICON_EMOJI: ':white_check_mark:'
         SLACK_USERNAME: 'GitHubAction'
@@ -38,7 +37,7 @@ runs:
       if: ${{ steps.workflow-status.outputs.status == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
-        SLACK_MESSAGE: 'Failed build'
+        SLACK_MESSAGE: Failed building - ${{ github.event.repository.name }}
         SLACK_CHANNEL: ${{ inputs.channel }}
         SLACK_ICON_EMOJI: ':octagonal_sign:'
         SLACK_USERNAME: 'GitHubAction'
