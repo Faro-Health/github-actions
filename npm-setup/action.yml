@@ -4,7 +4,7 @@ description: 'Set up nmp and node'
 inputs:
   node-version:
     required: false
-    default: 16
+    default: 18
     description: 'Node version'
   npm-token:
     required: true
