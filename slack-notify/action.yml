@@ -26,7 +26,7 @@ runs:
       if: ${{ steps.workflow-status.outputs.status == 'success' && inputs.last-status  == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
-        SLACK_MESSAGE: Build is now fixed - ${{ github.event.repository.name }}
+        SLACK_MESSAGE: ${{ github.event.repository.name }} - build is fixed.
         SLACK_CHANNEL: ${{ inputs.channel }}
         SLACK_ICON_EMOJI: ':white_check_mark:'
         SLACK_USERNAME: 'GitHubAction'
@@ -37,7 +37,7 @@ runs:
       if: ${{ steps.workflow-status.outputs.status == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
-        SLACK_MESSAGE: Failed building - ${{ github.event.repository.name }}
+        SLACK_MESSAGE: ${{ github.event.repository.name }} - failed build
         SLACK_CHANNEL: ${{ inputs.channel }}
         SLACK_ICON_EMOJI: ':octagonal_sign:'
         SLACK_USERNAME: 'GitHubAction'
