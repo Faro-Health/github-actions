@@ -1,0 +1,43 @@
+name: 'Docker build and publish'
+description: 'Docker build and publish'
+
+inputs:
+  version:
+    required: true
+    description: 'A docker version to build'
+  target-image-name:
+    required: true
+    description: 'A docker image name'
+  registry-login-server:
+    required: true
+    description:  'Docker registry server'
+  registry-username:
+    required: true
+    description:  'Docker registry server user name'
+  registry-password:
+    required: true
+    description:  'Docker registry server user password'
+  working-directory:
+    required: false
+    default: './'
+    description: 'Working directory.'
+
+runs:
+  using: "composite"
+  steps:
+    - name: 'Connect to docker registry'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ inputs.registry-login-server }}
+        username: ${{ inputs.registry-username }}
+        password: ${{ inputs.registry-password }}
+    - name: 'Build and push docker image'
+      run: |
+        cp ~/.npmrc `pwd`/docker/.npmrc
+        docker build -f docker/Dockerfile -t ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:${{ inputs.version }} -t  ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:latest
+        docker push -a ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}
+      env:
+        VERSION: ${{ inputs.version }}
+      shell: bash
+      working-directory: ${{inputs.working-directory}}
+
