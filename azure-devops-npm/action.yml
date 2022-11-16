@@ -1,5 +1,5 @@
-name: 'Azure DevOps NPM'
-description: 'Setup .npmrc file for azure authentification'
+name: 'Azure Artifact Feed NPM Authenticate'
+description: 'Generate an .npmrc file for azure authentication'
 inputs:
   organization:
     description: 'Your Azure organization'
@@ -18,26 +18,23 @@ inputs:
     description: "Your Azure email"
     required: false
     default: githubaction@farohealth.com
-  npmrc-path:
-    description: "Path to the file"
-    required: false
-    default: "~/.npmrc"
+
 runs:
   using: "composite"
   steps:
     - id: set_vars
+      shell: bash
       run: |
         echo "azure_url=pkgs.dev.azure.com/${{ inputs.organization }}/_packaging/${{ inputs.registry }}/npm" >> $GITHUB_OUTPUT
-      shell: bash
-    - run: |
-        echo "registry=https://${{ steps.set_vars.outputs.azure_url }}/registry/" > ${{ inputs.npmrc-path }}
-        echo "always-auth=true" >> ${{ inputs.npmrc-path }}
-        echo "; begin auth token" >> ${{ inputs.npmrc-path }}
-        echo "//${{ steps.set_vars.outputs.azure_url }}/registry/:username=${{ inputs.user }}" >> ${{ inputs.npmrc-path }}
-        echo '//${{ steps.set_vars.outputs.azure_url }}/registry/:_password="${{ inputs.password}}"' >> ${{ inputs.npmrc-path }}
-        echo '//${{ steps.set_vars.outputs.azure_url }}/registry/:email=${{ inputs.email }}' >> ${{ inputs.npmrc-path }}
-        echo '//${{ steps.set_vars.outputs.azure_url }}/:username=${{ inputs.user }}' >> ${{ inputs.npmrc-path }}
-        echo '//${{ steps.set_vars.outputs.azure_url }}/:_password="${{ inputs.password }}"' >> ${{ inputs.npmrc-path }}
-        echo '//${{ steps.set_vars.outputs.azure_url }}/:email=${{ inputs.email }}' >> ${{ inputs.npmrc-path }}
-        echo '; end auth token' >> ${{ inputs.npmrc-path }}
-      shell: bash
+    - shell: bash
+      run: |
+        echo "registry=https://${{ steps.set_vars.outputs.azure_url }}/registry/" > ~/.npmrc
+        echo "always-auth=true" >> ~/.npmrc
+        echo "; begin auth token" >> ~/.npmrc
+        echo "//${{ steps.set_vars.outputs.azure_url }}/registry/:username=${{ inputs.user }}" >> ~/.npmrc
+        echo '//${{ steps.set_vars.outputs.azure_url }}/registry/:_password="${{ inputs.password}}"' >> ~/.npmrc
+        echo '//${{ steps.set_vars.outputs.azure_url }}/registry/:email=${{ inputs.email }}' >> ~/.npmrc
+        echo '//${{ steps.set_vars.outputs.azure_url }}/:username=${{ inputs.user }}' >> ~/.npmrc
+        echo '//${{ steps.set_vars.outputs.azure_url }}/:_password="${{ inputs.password }}"' >> ~/.npmrc
+        echo '//${{ steps.set_vars.outputs.azure_url }}/:email=${{ inputs.email }}' >> ~/.npmrc
+        echo '; end auth token' >> ~/.npmrc

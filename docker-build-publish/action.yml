@@ -1,16 +1,16 @@
-name: 'Docker build and publish'
-description: 'Docker build and publish'
+name: 'NodeJS Service Docker build and publish'
+description: 'Docker build and publish for Node-based API service containers'
 
 inputs:
   version:
     required: true
-    description: 'A docker version to build'
+    description: 'The image version/tag'
   target-image-name:
     required: true
-    description: 'A docker image name'
+    description: 'The image name'
   registry-login-server:
     required: true
-    description:  'Docker registry server'
+    description: 'Docker registry server'
   registry-username:
     required: true
     description:  'Docker registry server user name'
@@ -19,8 +19,8 @@ inputs:
     description:  'Docker registry server user password'
   working-directory:
     required: false
-    default: './'
-    description: 'Working directory.'
+    default: '.'
+    description: 'Working directory without trailing slash'
 
 runs:
   using: "composite"

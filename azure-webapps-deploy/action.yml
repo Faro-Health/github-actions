@@ -1,10 +1,10 @@
-name: 'Azure web app deploy'
+name: 'Deploy to Azure Web App for Container'
 description: 'Azure web app deploy'
 
 inputs:
   app-name:
     required: true
-    description: 'Azure app server name to deploy to'
+    description: 'Azure app service name to deploy to'
   azure-credentials:
     required: true
     description: 'Azure credentials'
@@ -24,7 +24,7 @@ runs:
     - uses: azure/login@v1
       with:
         creds: ${{ inputs.azure-credentials }}
-    - name: Deploy to Azure Web App for Container'
+    - name: Deploy to Azure Web App for Container
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ inputs.app-name }}

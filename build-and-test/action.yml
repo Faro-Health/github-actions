@@ -4,20 +4,20 @@ description: 'Lint, build, test and generate coverage report'
 inputs:
   minimum-coverage:
     required: false
-    default: 50
-    description: 'The minimum allowed coverage percentage as an integer.'
+    default: '50'
+    description: 'The minimum allowed coverage percentage as an integer'
   test-report-path:
     required: false
     default: 'test-results.xml'
-    description: 'The path to the test report.'
+    description: 'The path to the test results generated relative to working directory'
   coverage-report-path:
     required: false
     default: 'cobertura-coverage.xml'
-    description: 'The path to the coverage report.'
+    description: 'The path to the coverage report generated relative to working directory'
   working-directory:
     required: false
-    default: './'
-    description: 'Working directory.'
+    default: '.'
+    description: 'Working directory without trailing slash'
 
 runs:
   using: "composite"
@@ -38,12 +38,13 @@ runs:
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
-        junit_files: ${{inputs.test-report-path}}
+        junit_files: ${{inputs.working-directory}}/${{inputs.test-report-path}}
     - name: Publish Cobertura coverage results
       uses: 5monkeys/cobertura-action@master
+      # TODO remove conditional after [Alla to add]
       if: ${{ github.event_name != 'workflow_dispatch' }}
       with:
-        path: ${{inputs.coverage-report-path}}
+        path: ${{inputs.working-directory}}/${{inputs.coverage-report-path}}
         report_name: Code Coverage
         show_line: true
         fail_below_threshold: false
