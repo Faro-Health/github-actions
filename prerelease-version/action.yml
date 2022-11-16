@@ -1,15 +1,15 @@
-name: 'Version and publish'
-description: 'Version and publish'
+name: 'Version and push'
+description: 'Bump package.json version to next pre-release and push commit to git'
 
 inputs:
   working-directory:
     required: false
-    default: './'
-    description: 'Working directory.'
+    default: '.'
+    description: 'Working directory without trailing slash'
 
 outputs:
   version:
-    description: "Newly created prerelease version"
+    description: "Final assigned prerelease version"
     value: ${{ steps.prerelease-version.outputs.version }}
 
 runs:
@@ -28,6 +28,6 @@ runs:
       shell: bash
       working-directory: ${{inputs.working-directory}}
     - id: prerelease-version
-      run:   echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+      run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{inputs.working-directory}}

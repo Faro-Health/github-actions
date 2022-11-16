@@ -1,5 +1,5 @@
-name: 'Version and publish'
-description: 'Version and publish'
+name: 'Version and push'
+description: 'Bump package.json version to next pre-release and push commit to git'
 
 inputs:
   working-directory:

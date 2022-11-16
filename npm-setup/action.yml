@@ -1,14 +1,14 @@
-name: 'Set up nmp and node'
-description: 'Set up nmp and node'
+name: 'Set up npm and node'
+description: 'Initialize npm and node versions and authentication'
 
 inputs:
   node-version:
     required: false
-    default: 18
+    default: '18'
     description: 'Node version'
   npm-token:
     required: true
-    description: 'Token to connect to private npm artifactory'
+    description: 'Authentication token to connect to Azure Artifact Feed'
 
 runs:
   using: "composite"

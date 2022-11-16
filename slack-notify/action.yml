@@ -1,5 +1,5 @@
 name: 'Slack notification'
-description: 'Slack notification: notifies on failure and when a failure is fixed'
+description: 'Slack notification: notifies on success->failure and failure->success'
 
 inputs:
   last-status:
@@ -7,11 +7,11 @@ inputs:
     description: 'Workflow last run status: success or failure'
   slack-webhook:
     required: true
-    description: 'Slack webhook'
+    description: 'Slack webhook uri'
   channel:
     required: false
     default: ci-failure
-    description: 'CI Channel'
+    description: 'CI Channel name'
 
 runs:
   using: "composite"
@@ -26,18 +26,18 @@ runs:
       if: ${{ steps.workflow-status.outputs.status == 'success' && inputs.last-status  == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
-        SLACK_MESSAGE: 'Fixed now!'
+        SLACK_MESSAGE: ${{ github.event.repository.name }} - build is fixed.
         SLACK_CHANNEL: ${{ inputs.channel }}
         SLACK_ICON_EMOJI: ':white_check_mark:'
         SLACK_USERNAME: 'GitHubAction'
         SLACK_COLOR: ${{ steps.workflow-status.outputs.status }}
 
-    - name: Build faile slack message
+    - name: Build failed slack message
       uses: rtCamp/action-slack-notify@v2.2.0
       if: ${{ steps.workflow-status.outputs.status == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
-        SLACK_MESSAGE: 'Failed build'
+        SLACK_MESSAGE: ${{ github.event.repository.name }} - failed build
         SLACK_CHANNEL: ${{ inputs.channel }}
         SLACK_ICON_EMOJI: ':octagonal_sign:'
         SLACK_USERNAME: 'GitHubAction'
