@@ -36,8 +36,6 @@ runs:
         cp ~/.npmrc `pwd`/docker/.npmrc
         docker build -f docker/Dockerfile -t ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:${{ inputs.version }} -t  ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}:latest
         docker push -a ${{ inputs.registry-login-server }}/${{ inputs.target-image-name }}
-      env:
-        VERSION: ${{ inputs.version }}
       shell: bash
       working-directory: ${{inputs.working-directory}}
 
