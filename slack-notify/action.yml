@@ -2,9 +2,9 @@ name: 'Slack notification'
 description: 'Slack notification: notifies on success->failure and failure->success'
 
 inputs:
-  last-status:
+  github-token:
     required: true
-    description: 'Workflow last run status: success or failure'
+    description: 'Github token'
   slack-webhook:
     required: true
     description: 'Slack webhook uri'
@@ -16,30 +16,37 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Get previous workflow status
+      uses: Mercymeilya/last-workflow-status@v0.3.2
+      if: always()
+      id: workflow-last-status
+      with:
+        github_token: ${{ inputs.github-token }}
+
     - name: Get current workflow status
       uses: martialonline/workflow-status@v3
       if: always()
       id: workflow-status
-
-    - name: Build fixed slack message
-      uses: rtCamp/action-slack-notify@v2.2.0
-      if: ${{ steps.workflow-status.outputs.status == 'success' && inputs.last-status  == 'failure' }}
-      env:
-        SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
-        SLACK_MESSAGE: ${{ github.event.repository.name }} - build is fixed.
-        SLACK_CHANNEL: ${{ inputs.channel }}
-        SLACK_ICON_EMOJI: ':white_check_mark:'
-        SLACK_USERNAME: 'GitHubAction'
-        SLACK_COLOR: ${{ steps.workflow-status.outputs.status }}
 
     - name: Build failed slack message
       uses: rtCamp/action-slack-notify@v2.2.0
       if: ${{ steps.workflow-status.outputs.status == 'failure' }}
       env:
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
-        SLACK_MESSAGE: ${{ github.event.repository.name }} - failed build
+        SLACK_MESSAGE: ${{ github.workflow }} - failed
         SLACK_CHANNEL: ${{ inputs.channel }}
         SLACK_ICON_EMOJI: ':octagonal_sign:'
+        SLACK_USERNAME: 'GitHubAction'
+        SLACK_COLOR: ${{ steps.workflow-status.outputs.status }}
+
+    - name: Build fixed slack message
+      uses: rtCamp/action-slack-notify@v2.2.0
+      if: ${{ steps.workflow-status.outputs.status == 'success' && steps.workflow-last-status.outputs.last_status == 'failure' }}
+      env:
+        SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
+        SLACK_MESSAGE: ${{ github.workflow }} - is fixed
+        SLACK_CHANNEL: ${{ inputs.channel }}
+        SLACK_ICON_EMOJI: ':white_check_mark:'
         SLACK_USERNAME: 'GitHubAction'
         SLACK_COLOR: ${{ steps.workflow-status.outputs.status }}
 
