@@ -46,6 +46,6 @@ runs:
       with:
         path: ${{inputs.working-directory}}/${{inputs.coverage-report-path}}
         report_name: Code Coverage
-        show_line: true
+        only_changed_files: true
         fail_below_threshold: false
         minimum_coverage: ${{ inputs.minimum-coverage }}
