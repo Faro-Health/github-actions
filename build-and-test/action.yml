@@ -18,6 +18,10 @@ inputs:
     required: false
     default: '.'
     description: 'Working directory without trailing slash'
+  coverage-only-changed-files:
+    required: false
+    default: 'false'
+    description: 'Only show coverage for changed files.'
 
 runs:
   using: "composite"
@@ -46,6 +50,7 @@ runs:
       with:
         path: ${{inputs.working-directory}}/${{inputs.coverage-report-path}}
         report_name: Code Coverage
-        only_changed_files: true
+        only_changed_files: ${{ inputs.coverage-only-changed-files }}
+        show_line: true
         fail_below_threshold: false
         minimum_coverage: ${{ inputs.minimum-coverage }}
