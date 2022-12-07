@@ -16,7 +16,7 @@ on:
         required: true
 
 jobs:
-  run-job:
+  build_lint_test_job:
     runs-on: ubuntu-latest
     container: node:18
 
