@@ -42,6 +42,7 @@ jobs:
         with:
           npm-token: ${{ secrets.npm-token }}
       - run: npm ci
+      - run: npm explore faro-db-medical-ontology -- npm run migrate -- -e
       - run: npm explore faro-db-tenant -- npm run migrate -- -e test
         env:
           TEST_USER: postgres
