@@ -2,6 +2,19 @@ name: module-with-postgres-pr-build
 
 on:
   workflow_call:
+    inputs:
+      test-report-path:
+        required: false
+        default: 'test-results.xml'
+        description: 'The path to the test results generated relative to working directory'
+      coverage-report-path:
+        required: false
+        default: 'cobertura-coverage.xml'
+        description: 'The path to the coverage report generated relative to working directory'
+      working-directory:
+        required: false
+        default: '.'
+        description: 'Working directory without trailing slash'
     secrets:
       npm-token:
         required: true
@@ -56,9 +69,10 @@ jobs:
           TEST_URL: jdbc:postgresql://postgres:5432/faro_db_test
       - uses: Faro-Health/github-actions/build-and-test@master
         with:
-          test-report-path: 'test-output/test-results.xml'
-          coverage-report-path: 'coverage-report/cobertura-coverage.xml'
+          test-report-path:  ${{inputs.test-report-path}}
+          coverage-report-path:  ${{inputs.inputs.coverage-report-path}}
           coverage-only-changed-files: true
+          working-directory: ${{inputs.working-directory}}
         env:
           DBCONFIG_HOST: postgres
           DBCONFIG_DATABASE: faro_db_test
