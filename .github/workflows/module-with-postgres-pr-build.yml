@@ -4,12 +4,12 @@ on:
   workflow_call:
     inputs:
       test-report-path:
-        required: false
+        required: true
         type: string
         default: 'test-results.xml'
         description: 'The path to the test results generated relative to working directory'
       coverage-report-path:
-        required: false
+        required: true
         type: string
         default: 'cobertura-coverage.xml'
         description: 'The path to the coverage report generated relative to working directory'
