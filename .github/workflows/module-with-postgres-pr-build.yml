@@ -32,17 +32,21 @@ jobs:
       - uses: actions/checkout@v3
       - uses: Faro-Health/github-actions/npm-setup@master
         with:
-          npm-token: ${{ secrets.npm-token }}
+          npm-token: ${{ secrets.AZURE_NPM_TOKEN }}
+      - run: npm i
+      - run: npm explore faro-db-tenant -- npm run migrate -- -e test
+        env:
+          TEST_TENANTS_FARO: sample_tenant
+          TEST_PASSWORD: postgres
+          TEST_USER: postgres
       - uses: Faro-Health/github-actions/build-and-test@master
         with:
           test-report-path: 'test-output/test-results.xml'
           coverage-report-path: 'coverage-report/cobertura-coverage.xml'
           coverage-only-changed-files: true
         env:
-          DBCONFIG_HOST: postgres
+          DBCONFIG_HOST: localhost
           DBCONFIG_DATABASE: test
           DBCONFIG_USER: postgres
           DBCONFIG_PASSWORD: postgres
           DBCONFIG_DEFAULTSCHEMA: public
-          APPINSIGHTS_ENABLE: false
-          AUTH_ENABLE: false
