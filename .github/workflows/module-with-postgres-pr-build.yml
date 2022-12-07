@@ -29,6 +29,14 @@ jobs:
           --health-retries 5
 
     steps:
+      - name: Install PostgreSQL client
+        run: |
+            apt-get update
+            apt-get install --yes postgresql-client
+      - name: install extention
+        run: psql -h postgres -d faro_db_test -U postgres -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'
+        env:
+          PGPASSWORD: postgres
       - uses: actions/checkout@v3
       - uses: Faro-Health/github-actions/npm-setup@master
         with:
