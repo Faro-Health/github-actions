@@ -41,8 +41,9 @@ jobs:
       - uses: Faro-Health/github-actions/npm-setup@master
         with:
           npm-token: ${{ secrets.npm-token }}
-      - run: npm ci
-      - run: npm explore faro-db-medical-ontology -- npm run migrate -- -e
+      - run: npm ci faro-db-medical-ontology
+      - run: npm explore faro-db-medical-ontology -- npm run migrate -- -e test
+      - run: npm ci faro-db-tenant
       - run: npm explore faro-db-tenant -- npm run migrate -- -e test
         env:
           TEST_USER: postgres
