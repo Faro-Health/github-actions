@@ -72,7 +72,7 @@ jobs:
       - uses: Faro-Health/github-actions/build-and-test@master
         with:
           test-report-path:  ${{inputs.test-report-path}}
-          coverage-report-path:  ${{inputs.inputs.coverage-report-path}}
+          coverage-report-path:  ${{inputs.coverage-report-path}}
           coverage-only-changed-files: true
         env:
           DBCONFIG_HOST: postgres
