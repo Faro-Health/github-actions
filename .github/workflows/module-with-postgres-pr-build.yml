@@ -1,0 +1,48 @@
+name: module-with-postgres-pr-build
+
+on:
+  workflow_call:
+    secrets:
+      npm-token:
+        required: true
+
+jobs:
+  reusable_workflow_job:
+    runs-on: ubuntu-latest
+    container: node:18
+
+    services:
+      # Label used to access the service container
+      postgres:
+        image: postgres:12-alpine
+        env:
+          POSTGRES_DB: test
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+        # set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: Faro-Health/github-actions/npm-setup@master
+        with:
+          npm-token: ${{ secrets.npm-token }}
+      - uses: Faro-Health/github-actions/build-and-test@master
+        with:
+          test-report-path: 'test-output/test-results.xml'
+          coverage-report-path: 'coverage-report/cobertura-coverage.xml'
+          coverage-only-changed-files: true
+        env:
+          DBCONFIG_HOST: postgres
+          DBCONFIG_DATABASE: test
+          DBCONFIG_USER: postgres
+          DBCONFIG_PASSWORD: postgres
+          DBCONFIG_DEFAULTSCHEMA: public
+          APPINSIGHTS_ENABLE: false
+          AUTH_ENABLE: false
