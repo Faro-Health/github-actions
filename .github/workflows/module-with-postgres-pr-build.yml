@@ -66,6 +66,9 @@ jobs:
           TEST_USER: postgres
           TEST_PASSWORD: postgres
           TEST_URL: jdbc:postgresql://postgres:5432/faro_db_test
+      #   Below is needed in npm workspaces to create folders for test and coverage
+      #   https://github.com/actions/runner/issues/878
+      - run: chmod -R 777 /__w
       - uses: Faro-Health/github-actions/build-and-test@master
         with:
           test-report-path:  ${{inputs.test-report-path}}
