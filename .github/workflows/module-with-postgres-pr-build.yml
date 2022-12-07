@@ -5,10 +5,12 @@ on:
     inputs:
       test-report-path:
         required: false
+        type: string
         default: 'test-results.xml'
         description: 'The path to the test results generated relative to working directory'
       coverage-report-path:
         required: false
+        type: string
         default: 'cobertura-coverage.xml'
         description: 'The path to the coverage report generated relative to working directory'
     secrets:
