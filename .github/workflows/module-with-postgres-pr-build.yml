@@ -52,6 +52,7 @@ jobs:
       - uses: Faro-Health/github-actions/npm-setup@master
         with:
           npm-token: ${{ secrets.npm-token }}
+      # TODO: remove faro-db-medical-ontology from here once we break the schema interdependency
       - run: npm ci faro-db-medical-ontology
       - run: npm explore faro-db-medical-ontology -- npm run migrate -- -e test
         env:
