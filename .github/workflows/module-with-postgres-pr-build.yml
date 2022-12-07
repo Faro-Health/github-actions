@@ -16,7 +16,7 @@ jobs:
       postgres:
         image: postgres:12-alpine
         env:
-          POSTGRES_DB: test
+          POSTGRES_DB: faro_db_test
           POSTGRES_PASSWORD: postgres
           POSTGRES_USER: postgres
         ports:
@@ -46,7 +46,7 @@ jobs:
           coverage-only-changed-files: true
         env:
           DBCONFIG_HOST: localhost
-          DBCONFIG_DATABASE: test
+          DBCONFIG_DATABASE: faro_db_test
           DBCONFIG_USER: postgres
           DBCONFIG_PASSWORD: postgres
           DBCONFIG_DEFAULTSCHEMA: public
