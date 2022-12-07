@@ -6,19 +6,17 @@ on:
       test-report-path:
         required: true
         type: string
-        default: 'test-results.xml'
-        description: 'The path to the test results generated relative to working directory'
+        description: 'The path to the test results generated relative to the root working directory'
       coverage-report-path:
         required: true
         type: string
-        default: 'cobertura-coverage.xml'
-        description: 'The path to the coverage report generated relative to working directory'
+        description: 'The path to the coverage report generated relative to the root working directory'
     secrets:
       npm-token:
         required: true
 
 jobs:
-  reusable_workflow_job:
+  build_lint_test_job:
     runs-on: ubuntu-latest
     container: node:18
 
