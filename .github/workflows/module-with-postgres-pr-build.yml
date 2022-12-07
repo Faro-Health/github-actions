@@ -13,7 +13,7 @@ jobs:
 
     services:
       # Label used to access the service container
-      localhost:
+      postgres:
         image: postgres:12-alpine
         env:
           POSTGRES_DB: faro_db_test
@@ -38,14 +38,14 @@ jobs:
         env:
           TEST_USER: postgres
           TEST_PASSWORD: postgres
+          TEST_URL: jdbc:postgresql://postgres:5432/faro_db_test
       - uses: Faro-Health/github-actions/build-and-test@master
         with:
           test-report-path: 'test-output/test-results.xml'
           coverage-report-path: 'coverage-report/cobertura-coverage.xml'
           coverage-only-changed-files: true
         env:
-          DBCONFIG_HOST: localhost
+          DBCONFIG_HOST: postgres
           DBCONFIG_DATABASE: faro_db_test
           DBCONFIG_USER: postgres
           DBCONFIG_PASSWORD: postgres
-          DBCONFIG_DEFAULTSCHEMA: public
