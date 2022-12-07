@@ -32,8 +32,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: Faro-Health/github-actions/npm-setup@master
         with:
-          npm-token: ${{ secrets.AZURE_NPM_TOKEN }}
-      - run: npm i
+          npm-token: ${{ secrets.npm-token }}
+      - run: npm install
       - run: npm explore faro-db-tenant -- npm run migrate -- -e test
         env:
           TEST_TENANTS_FARO: sample_tenant
