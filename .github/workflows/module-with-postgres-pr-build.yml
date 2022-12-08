@@ -1,0 +1,79 @@
+name: module-with-postgres-pr-build
+
+on:
+  workflow_call:
+    inputs:
+      test-report-path:
+        required: true
+        type: string
+        description: 'The path to the test results generated relative to the root working directory'
+      coverage-report-path:
+        required: true
+        type: string
+        description: 'The path to the coverage report generated relative to the root working directory'
+    secrets:
+      npm-token:
+        required: true
+
+jobs:
+  build_lint_test_job:
+    runs-on: ubuntu-latest
+    container: node:18
+
+    services:
+      # Label used to access the service container
+      postgres:
+        image: postgres:12-alpine
+        env:
+          POSTGRES_DB: faro_db_test
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+        # set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Install PostgreSQL client
+        run: |
+            apt-get update
+            apt-get install --yes postgresql-client
+      - name: install extention
+        run: psql -h postgres -d faro_db_test -U postgres -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'
+        env:
+          PGPASSWORD: postgres
+      - uses: actions/checkout@v3
+      - uses: Faro-Health/github-actions/npm-setup@master
+        with:
+          npm-token: ${{ secrets.npm-token }}
+      # TODO: remove faro-db-medical-ontology from here once we break the schema interdependency
+      - run: npm ci faro-db-medical-ontology
+      - run: npm explore faro-db-medical-ontology -- npm run migrate -- -e test
+        env:
+          TEST_USER: postgres
+          TEST_PASSWORD: postgres
+          TEST_URL: jdbc:postgresql://postgres:5432/faro_db_test
+          TEST_HOST: postgres
+      - run: npm ci faro-db-tenant
+      - run: npm explore faro-db-tenant -- npm run migrate -- -e test
+        env:
+          TEST_USER: postgres
+          TEST_PASSWORD: postgres
+          TEST_URL: jdbc:postgresql://postgres:5432/faro_db_test
+      #   Below is needed in npm workspaces to create folders for test and coverage
+      #   https://github.com/actions/runner/issues/878
+      - run: chmod -R 777 /__w
+      - uses: Faro-Health/github-actions/build-and-test@master
+        with:
+          test-report-path:  ${{inputs.test-report-path}}
+          coverage-report-path:  ${{inputs.coverage-report-path}}
+          coverage-only-changed-files: true
+        env:
+          DBCONFIG_HOST: postgres
+          DBCONFIG_DATABASE: faro_db_test
+          DBCONFIG_USER: postgres
+          DBCONFIG_PASSWORD: postgres
