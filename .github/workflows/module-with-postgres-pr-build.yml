@@ -18,7 +18,7 @@ on:
 jobs:
   build_lint_test_job:
     runs-on: ubuntu-latest
-    container: node:18-slim
+    container: node:18
 
     services:
       # Label used to access the service container
