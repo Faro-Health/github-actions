@@ -1,0 +1,49 @@
+name: 'update-versions-manifest'
+description: 'updates current versions manifest with latest deployed version'
+
+inputs:
+  environment:
+    required: true
+    description: 'Deployed environment'
+  version:
+    required: true
+    description: 'Version deployed'
+  appname:
+    required: true
+    description: 'app name'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+      env:
+        ACCESS_TOKEN: '${{ secrets.ACCESS_TOKEN }}'
+    - name: npm install
+      run: npm install
+    - name: git set your account's default identity.
+      run: |
+        mkdir devtools-ignore
+        cd devtools-ignore
+        git config --global user.email "ci.build@farohealth.com"
+        git config --global user.name "CI Build"
+    - name: Update manifest
+      uses: actions/checkout@v3
+      with:
+        name: Faro-Health/faro-developer-tools
+        ref: refs/heads/master
+    - name: Setup git
+      run: |
+        npm run updateCurrentVersionManifest -n ${{ inputs.appname }} -v ${{ inputs.version }} -e ${{ inputs.environment }}
+    - name: Push to repo
+      run: |
+        git add .
+        git commit -m "version manifest update $(date) [skip ci]"
+        git push
+    - name: Push to repo
+      run: |
+        cd ../
+        rm -rf ./devtools-ignore
+      # TODO: remove cloned developer tools devtools-ignore directory
