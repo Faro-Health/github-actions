@@ -2,48 +2,53 @@ name: 'update-versions-manifest'
 description: 'updates current versions manifest with latest deployed version'
 
 inputs:
-  environment:
+  filename:
     required: true
     description: 'Deployed environment'
-  version:
+  newversions:
     required: true
-    description: 'Version deployed'
-  appname:
+    description: 'escaped json representing a dictionary of new Versions deployed to a specific environment'
+  manifestrepo:
     required: true
-    description: 'app name'
+    description: 'repo of manifest files'
+  manifestreporef:
+    required: true
+    description: 'branch ref for manifests file repo'
+  gitemail:
+    description: 'git account email'
+    required: true
+  gitusername:
+    required: true
+    description: 'git account username'
 
 runs:
   using: "composite"
   steps:
-    - name: Setup node
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-      env:
-        ACCESS_TOKEN: '${{ secrets.ACCESS_TOKEN }}'
-    - name: npm install
-      run: npm install
-    - name: git set your account's default identity.
+    - name: Set default git identity.
       run: |
-        mkdir devtools-ignore
-        cd devtools-ignore
-        git config --global user.email "ci.build@farohealth.com"
-        git config --global user.name "CI Build"
+        mkdir manifests
+        cd manifests
+        git config --global user.email "${{ inputs.gitemail }}"
+        git config --global user.name "${{ inputs.gitusername }}"
+    - uses: actions/checkout@v3
+      with:
+        name: ${{ inputs.manifestrepo }}
+        ref:  ${{ inputs.manifestreporef }}
     - name: Update manifest
-      uses: actions/checkout@v3
-      with:
-        name: Faro-Health/faro-developer-tools
-        ref: refs/heads/master
-    - name: Setup git
+      if:
       run: |
-        npm run updateCurrentVersionManifest -n ${{ inputs.appname }} -v ${{ inputs.version }} -e ${{ inputs.environment }}
+        jq --arg versions ${{ inputs.newversions }} '. * ($versions | fromjson)' ${{inpts.filename}} > ${{inpts.filename}}.tmp && mv ${{inpts.filename}}.tmp ${{inpts.filename}}
+        - name: Update manifest
+      if: ${{ inputs.replaceall }}
+      run: |
+        echo ${{ inputs.newversions }} > ${{inpts.filename}}
     - name: Push to repo
       run: |
         git add .
         git commit -m "version manifest update $(date) [skip ci]"
         git push
-    - name: Push to repo
+    - name: Cleanup
       run: |
         cd ../
-        rm -rf ./devtools-ignore
-      # TODO: remove cloned developer tools devtools-ignore directory
+        rm -rf ./manifests
+
