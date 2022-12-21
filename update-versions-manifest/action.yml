@@ -20,6 +20,9 @@ inputs:
   gitusername:
     required: true
     description: 'git account username'
+  replaceall:
+    required: false
+    description: 'flag to replaceentire contents of selected file'
 
 runs:
   using: "composite"
@@ -35,13 +38,13 @@ runs:
         name: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
     - name: Update manifest
-      if:
+      if: ${{ inputs.replaceall != 'true' }}
       run: |
         jq --arg versions ${{ inputs.newversions }} '. * ($versions | fromjson)' ${{inpts.filename}} > ${{inpts.filename}}.tmp && mv ${{inpts.filename}}.tmp ${{inpts.filename}}
-        - name: Update manifest
-      if: ${{ inputs.replaceall }}
+    - name: Update manifest
+      if: ${{ inputs.replaceall == 'true' }}
       run: |
-        echo ${{ inputs.newversions }} > ${{inpts.filename}}
+        echo ${{ inputs.newversions | fromjson }} > ${{inpts.filename}}
     - name: Push to repo
       run: |
         git add .
