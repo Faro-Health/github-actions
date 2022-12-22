@@ -20,6 +20,8 @@ inputs:
   gitusername:
     required: true
     description: 'git account username'
+  ghtoken:
+    required: true
   replaceall:
     required: false
     description: 'flag to replaceentire contents of selected file'
@@ -36,6 +38,7 @@ runs:
       with:
         repository: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
+        token: ${{ inputs.ghtoken }}
     - name: Set default git identity.
       shell: bash
       run: |
