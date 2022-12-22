@@ -28,29 +28,34 @@ runs:
   using: "composite"
   steps:
     - name: Set default git identity.
+      shell: bash
       run: |
         mkdir manifests
         cd manifests
-        git config --global user.email "${{ inputs.gitemail }}"
-        git config --global user.name "${{ inputs.gitusername }}"
+        git config user.email "${{ inputs.gitemail }}"
+        git config user.name "${{ inputs.gitusername }}"
     - uses: actions/checkout@v3
       with:
         name: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
     - name: Update manifest
       if: ${{ inputs.replaceall != 'true' }}
+      shell: bash
       run: |
-        jq --arg versions ${{ inputs.newversions }} '. * ($versions | fromjson)' ${{inpts.filename}} > ${{inpts.filename}}.tmp && mv ${{inpts.filename}}.tmp ${{inpts.filename}}
+        jq --arg versions ${{ inputs.newversions }} '. * ($versions | fromjson)' ${{inputs.filename}} > ${{inputs.filename}}.tmp && mv ${{inputs.filename}}.tmp ${{inputs.filename}}
     - name: Update manifest
       if: ${{ inputs.replaceall == 'true' }}
+      shell: bash
       run: |
-        echo ${{ inputs.newversions | fromjson }} > ${{inpts.filename}}
+        echo ${{ inputs.newversions | fromjson }} > ${{inputs.filename}}
     - name: Push to repo
+      shell: bash
       run: |
         git add .
         git commit -m "version manifest update $(date) [skip ci]"
         git push
     - name: Cleanup
+      shell: bash
       run: |
         cd ../
         rm -rf ./manifests
