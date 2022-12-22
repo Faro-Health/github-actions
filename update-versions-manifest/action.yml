@@ -43,6 +43,11 @@ runs:
       shell: bash
       run: |
         tmpfile=$(mktemp)
+        echo "yo"
+        ls
+        echo "yoyo"
+        ls manifests
+        echo "yoyoyo"
         jq --arg versions "${{ inputs.newversions }}" '. * ($versions | fromjson)' ${{inputs.filename}} > $tmpfile && mv $tmpfile ${{inputs.filename}}
     - name: Update manifest
       if: ${{ inputs.replaceall == 'true' }}
