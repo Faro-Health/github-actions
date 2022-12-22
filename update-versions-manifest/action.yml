@@ -34,7 +34,7 @@ runs:
         cd manifests
     - uses: actions/checkout@v3
       with:
-        name: ${{ inputs.manifestrepo }}
+        repository: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
     - name: Set default git identity.
       shell: bash
