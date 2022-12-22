@@ -6,8 +6,8 @@ inputs:
     required: true
     description: 'Deployed environment'
   newversions:
-    default: ${{ format('\{ {0}: \"ya\" \}','hey')}}
-    required: true
+    default: ''
+    required: false
     description: 'escaped json representing a dictionary of new Versions deployed to a specific environment'
   manifestrepo:
     required: true
@@ -43,7 +43,7 @@ runs:
       working-directory: manifests
       run: |
         tmpfile=$(mktemp)
-        jq --arg versions "${{ inputs.newversions }}" '. * ($versions | fromjson)' ${{inputs.filename}} > $tmpfile && mv $tmpfile ${{inputs.filename}}
+        jq --arg versions "${{ format('\{ {0}: \"ya\" \}', 'hey') }}" '. * ($versions | fromjson)' ${{inputs.filename}} > $tmpfile && mv $tmpfile ${{inputs.filename}}
     - name: Update manifest
       if: ${{ inputs.replaceall == 'true' }}
       shell: bash
