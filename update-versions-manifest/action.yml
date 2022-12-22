@@ -22,6 +22,8 @@ inputs:
     description: 'git account username'
   ghtoken:
     required: true
+  ghtoken2:
+    required: true
   replaceall:
     required: false
     description: 'flag to replaceentire contents of selected file'
@@ -32,7 +34,7 @@ runs:
     - uses: actions/checkout@v3
       with:
         persist-credentials: false
-        token: ${{ inputs.ghtoken }}
+        token: ${{ inputs.ghtoken2 }}
         repository: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
         path: manifests
