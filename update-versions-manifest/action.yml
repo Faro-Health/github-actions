@@ -33,11 +33,10 @@ runs:
       shell: bash
       run: |
         pwd
-        ls
         mkdir ~/manifests
         ls
-        cd /manifests
-        ls
+        cd ~/manifests
+        pwd
     - name: Set default git identity.
       shell: bash
       run: |
