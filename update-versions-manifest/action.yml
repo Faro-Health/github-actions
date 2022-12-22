@@ -6,6 +6,7 @@ inputs:
     required: true
     description: 'Deployed environment'
   newversions:
+    default: '{}'
     required: true
     description: 'escaped json representing a dictionary of new Versions deployed to a specific environment'
   manifestrepo:
