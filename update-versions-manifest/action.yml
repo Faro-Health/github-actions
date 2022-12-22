@@ -22,8 +22,6 @@ inputs:
     description: 'git account username'
   ghtoken:
     required: true
-  ghtoken2:
-    required: true
   replaceall:
     required: false
     description: 'flag to replaceentire contents of selected file'
@@ -34,7 +32,7 @@ runs:
     - uses: actions/checkout@v3
       with:
         persist-credentials: false
-        token: ${{ inputs.ghtoken2 }}
+        token: ${{ inputs.ghtoken }}
         repository: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
         path: manifests
@@ -44,11 +42,6 @@ runs:
       working-directory: manifests
       run: |
         tmpfile=$(mktemp)
-        echo "yo"
-        ls
-        echo "yoyo"
-        ls manifests
-        echo "yoyoyo"
         jq --arg versions "${{ inputs.newversions }}" '. * ($versions | fromjson)' ${{inputs.filename}} > $tmpfile && mv $tmpfile ${{inputs.filename}}
     - name: Update manifest
       if: ${{ inputs.replaceall == 'true' }}
@@ -60,10 +53,13 @@ runs:
       shell: bash
       working-directory: manifests
       run: |
-        git remote set-url --push origin https://${{ inputs.gitusername }}:${{ inputs.ghtoken2 }}@github.com/${{ inputs.manifestrepo }}
+        git remote set-url --push origin https://${{ inputs.gitusername }}:${{ inputs.ghtoken }}@github.com/${{ inputs.manifestrepo }}
         git config user.email "${{ inputs.gitemail }}"
         git config user.name "${{ inputs.gitusername }}"
         git add .
         git commit -m "version manifest update $(date) [skip ci]"
         git push
-
+    - name: cleanup
+      shell: bash
+      run: |
+        rm -rf manifests
