@@ -33,7 +33,9 @@ runs:
       shell: bash
       run: |
         mkdir manifests
+        ls
         cd manifests
+        ls
     - name: Set default git identity.
       shell: bash
       run: |
