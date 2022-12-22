@@ -41,6 +41,7 @@ runs:
     - name: Update manifest
       if: ${{ inputs.replaceall != 'true' }}
       shell: bash
+      working-directory: manifests
       run: |
         tmpfile=$(mktemp)
         echo "yo"
@@ -52,10 +53,12 @@ runs:
     - name: Update manifest
       if: ${{ inputs.replaceall == 'true' }}
       shell: bash
+      working-directory: manifests
       run: |
         echo ${{ fromJSON(inputs.newversions) }} > ${{inputs.filename}}
     - name: Push to repo
       shell: bash
+      working-directory: manifests
       run: |
         git add .
         git commit -m "version manifest update $(date) [skip ci]"
