@@ -33,23 +33,17 @@ runs:
       shell: bash
       run: |
         pwd
-        mkdir ~/manifests
+        cd ~
+        mkdir manifests
         ls
-        cd ~/manifests
         pwd
-    - name: Set default git identity.
-      shell: bash
-      run: |
-        git init
-        git config user.email "${{ inputs.gitemail }}"
-        git config user.name "${{ inputs.gitusername }}"
     - uses: actions/checkout@v3
       with:
         persist-credentials: false
         repository: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
         token: ${{ inputs.ghtoken }}
-        path: ~/manifests
+        path: manifests
     - name: Update manifest
       if: ${{ inputs.replaceall != 'true' }}
       shell: bash
