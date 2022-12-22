@@ -43,7 +43,7 @@ runs:
       working-directory: manifests
       run: |
         tmpfile=$(mktemp)
-        jq --arg versions "${{ format('{{ "{0}": "{1}" }}', 'hey', 'you!') }}" '. * ($versions | fromjson)' ${{inputs.filename}} > $tmpfile && mv $tmpfile ${{inputs.filename}}
+        jq --arg versions "${{ format('{{ \"{0}\": \"{1}\" }}', 'hey', 'you!') }}" '. * ($versions | fromjson)' ${{inputs.filename}} > $tmpfile && mv $tmpfile ${{inputs.filename}}
     - name: Update manifest
       if: ${{ inputs.replaceall == 'true' }}
       shell: bash
