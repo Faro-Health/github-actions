@@ -29,14 +29,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Create subdirectory
-      shell: bash
-      run: |
-        pwd
-        cd ~
-        mkdir manifests
-        ls
-        pwd
     - uses: actions/checkout@v3
       with:
         persist-credentials: false
