@@ -42,7 +42,8 @@ runs:
       if: ${{ inputs.replaceall != 'true' }}
       shell: bash
       run: |
-        jq --arg versions "${{ inputs.newversions }}" '. * ($versions | fromjson)' ${{inputs.filename}} > ${{inputs.filename}}.tmp && mv ${{inputs.filename}}.tmp ${{inputs.filename}}
+        tmpfile=$(mktemp ${{inputs.filename}}.tmp)
+        jq --arg versions "${{ inputs.newversions }}" '. * ($versions | fromjson)' ${{inputs.filename}} > $tmpfile && mv $tmpfile ${{inputs.filename}}
     - name: Update manifest
       if: ${{ inputs.replaceall == 'true' }}
       shell: bash
