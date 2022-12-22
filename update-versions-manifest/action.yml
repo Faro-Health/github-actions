@@ -49,7 +49,7 @@ runs:
         repository: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
         token: ${{ inputs.ghtoken }}
-        path: /manifests
+        path: ~/manifests
     - name: Update manifest
       if: ${{ inputs.replaceall != 'true' }}
       shell: bash
