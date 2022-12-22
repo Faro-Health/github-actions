@@ -27,17 +27,20 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set default git identity.
+    - name: Create subdirectory
       shell: bash
       run: |
         mkdir manifests
         cd manifests
-        git config user.email "${{ inputs.gitemail }}"
-        git config user.name "${{ inputs.gitusername }}"
     - uses: actions/checkout@v3
       with:
         name: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
+    - name: Set default git identity.
+      shell: bash
+      run: |
+        git config user.email "${{ inputs.gitemail }}"
+        git config user.name "${{ inputs.gitusername }}"
     - name: Update manifest
       if: ${{ inputs.replaceall != 'true' }}
       shell: bash
