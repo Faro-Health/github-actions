@@ -60,6 +60,8 @@ runs:
       shell: bash
       working-directory: manifests
       run: |
+        git config user.email "${{ inputs.gitemail }}"
+        git config user.name "${{ inputs.gitusername }}"
         git add .
         git commit -m "version manifest update $(date) [skip ci]"
         git push
