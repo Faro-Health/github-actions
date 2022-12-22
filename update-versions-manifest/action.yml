@@ -41,13 +41,11 @@ runs:
     - name: Update manifest
       if: ${{ inputs.replaceall != 'true' }}
       shell: bash
-      run: |
-        jq --arg versions ${{ inputs.newversions }} '. * ($versions | fromjson)' ${{inputs.filename}} > ${{inputs.filename}}.tmp && mv ${{inputs.filename}}.tmp ${{inputs.filename}}
+      run: jq --arg versions ${{ inputs.newversions }} '. * ($versions | fromjson)' ${{inputs.filename}} > ${{inputs.filename}}.tmp && mv ${{inputs.filename}}.tmp ${{inputs.filename}}
     - name: Update manifest
       if: ${{ inputs.replaceall == 'true' }}
       shell: bash
-      run: |
-        echo ${{ inputs.newversions | fromjson }} > ${{inputs.filename}}
+      run: echo ${{ inputs.newversions | fromjson }} > ${{inputs.filename}}
     - name: Push to repo
       shell: bash
       run: |
