@@ -36,6 +36,7 @@ runs:
         cd manifests
     - uses: actions/checkout@v3
       with:
+        persist-credentials: false
         repository: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
         token: ${{ inputs.ghtoken }}
