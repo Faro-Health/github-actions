@@ -60,6 +60,7 @@ runs:
       shell: bash
       working-directory: manifests
       run: |
+        git remote set-url --push origin https://${{ inputs.gitusername }}:${{ inputs.ghtoken2 }}@github.com${{ inputs.manifestrepo }}
         git config user.email "${{ inputs.gitemail }}"
         git config user.name "${{ inputs.gitusername }}"
         git add .
