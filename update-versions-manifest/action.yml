@@ -52,9 +52,4 @@ runs:
         git add .
         git commit -m "version manifest update $(date) [skip ci]"
         git push
-    - name: Cleanup
-      shell: bash
-      run: |
-        cd ../
-        rm -rf ./manifests
 
