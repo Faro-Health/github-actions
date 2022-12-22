@@ -32,9 +32,9 @@ runs:
     - name: Create subdirectory
       shell: bash
       run: |
-        mkdir manifests
+        mkdir /manifests
         ls
-        cd manifests
+        cd /manifests
         ls
     - name: Set default git identity.
       shell: bash
@@ -48,6 +48,7 @@ runs:
         repository: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
         token: ${{ inputs.ghtoken }}
+        path: /manifests
     - name: Update manifest
       if: ${{ inputs.replaceall != 'true' }}
       shell: bash
