@@ -31,10 +31,8 @@ runs:
   steps:
     - uses: actions/checkout@v3
       with:
-        persist-credentials: false
         repository: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
-        token: ${{ inputs.ghtoken }}
         path: manifests
     - name: Update manifest
       if: ${{ inputs.replaceall != 'true' }}
