@@ -41,6 +41,7 @@ runs:
       shell: bash
       working-directory: manifests
       run: |
+        echo ${{inputs.newversions}}
         tmpfile=$(mktemp)
         jq --arg versions "${{ inputs.newversions }}" '. * ($versions | fromjson)' ${{inputs.filename}} > $tmpfile && mv $tmpfile ${{inputs.filename}}
     - name: Update manifest
