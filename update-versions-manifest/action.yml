@@ -36,6 +36,7 @@ runs:
       with:
         repository: ${{ inputs.manifestrepo }}
         ref:  ${{ inputs.manifestreporef }}
+        token: ${{ secrets.ACTIONS_TOKEN }}
     - name: Set default git identity.
       shell: bash
       run: |
