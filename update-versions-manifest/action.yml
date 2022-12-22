@@ -32,7 +32,9 @@ runs:
     - name: Create subdirectory
       shell: bash
       run: |
-        mkdir /manifests
+        pwd
+        ls
+        mkdir ~/manifests
         ls
         cd /manifests
         ls
