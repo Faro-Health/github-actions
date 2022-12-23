@@ -1,0 +1,60 @@
+name: 'update-versions-manifest'
+description: 'updates current versions manifest with latest deployed version(s)'
+
+inputs:
+  manifest-file-path:
+    required: true
+    description: 'Path within the manifest repo of the manifest file to edit'
+  new-versions-map:
+    required: true
+    description: 'Escaped json string representing a dictionary of new version(s) deployed to a specific environment'
+  manifest-repo:
+    required: true
+    description: 'repo of manifest files'
+  manifest-repo-ref:
+    required: true
+    description: 'branch ref for manifests file repo'
+  ghtoken:
+    required: true
+    description: 'github token'
+  gitemail:
+    default: "ci.build@farohealth.com"
+    description: 'git account email'
+    required: false
+  gitusername:
+    default: "CI Build"
+    required: false
+    description: 'git account username'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+        token: ${{ inputs.ghtoken }}
+        repository: ${{ inputs.manifest-repo }}
+        ref:  ${{ inputs.manifest-repo-ref }}
+        path: manifests
+    - name: Update manifest
+      shell: bash
+      working-directory: manifests
+      run: |
+        echo ${{inputs.new-versions-map}}
+        tmpfile=$(mktemp)
+        test -f ${{inputs.manifest-file-path}} || touch ${{inputs.manifest-file-path}} && echo '{}' > ${{inputs.manifest-file-path}}
+        jq --arg versions ${{ inputs.new-versions-map }} '. * ($versions | fromjson)' ${{inputs.manifest-file-path}} > $tmpfile && mv $tmpfile ${{inputs.manifest-file-path}}
+    - name: Push to repo
+      shell: bash
+      working-directory: manifests
+      run: |
+        git remote set-url --push origin https://${{ inputs.gitusername }}:${{ inputs.ghtoken }}@github.com/${{ inputs.manifest-repo }}
+        git config user.email "${{ inputs.gitemail }}"
+        git config user.name "${{ inputs.gitusername }}"
+        git add .
+        git commit -m "version manifest update $(date) [skip ci]"
+        git push
+    - name: cleanup
+      shell: bash
+      run: |
+        rm -rf manifests
