@@ -24,6 +24,7 @@ inputs:
     description: 'git account username'
   ghtoken:
     required: true
+    description: 'github token'
 
 runs:
   using: "composite"
