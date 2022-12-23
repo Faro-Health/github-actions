@@ -1,0 +1,27 @@
+name: 'update-versions-manifest'
+description: 'updates current versions manifest with latest deployed version'
+
+inputs:
+  app-name:
+    required: true
+    description: 'name of app to update'
+  version:
+    required: true
+    description: 'new version of app'
+  repository:
+    required: true
+    description: 'repository of app'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Update manifest
+      shell: bash
+      working-directory: manifests
+      run: |
+        echo "map=$(echo -n '{
+              "${{ inputs.app-name }}" : {
+                version: "${{ inputs.version }}",
+                repo: "${{ inputs.repository }}",
+              }
+            }' | jq -Rsa)" >> $GITHUB_OUTPUT
