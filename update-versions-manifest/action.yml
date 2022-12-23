@@ -8,10 +8,6 @@ inputs:
   new-versions-map:
     required: true
     description: 'escaped json representing a dictionary of new Versions deployed to a specific environment'
-  replace-whole-file:
-    default: false
-    required: false
-    description: 'flag to replaceentire contents of selected file'
   manifest-repo:
     required: true
     description: 'repo of manifest files'
@@ -19,9 +15,11 @@ inputs:
     required: true
     description: 'branch ref for manifests file repo'
   gitemail:
+    default: "ci.build@farohealth.com"
     description: 'git account email'
     required: true
   gitusername:
+    default: "CI Build"
     required: true
     description: 'git account username'
   ghtoken:
@@ -38,26 +36,18 @@ runs:
         ref:  ${{ inputs.manifest-repo-ref }}
         path: manifests
     - name: Update manifest
-      if: ${{ inputs.replaceall != 'true' }}
       shell: bash
       working-directory: manifests
       run: |
-        echo ${{inputs.newversions}}
+        echo ${{inputs.new-versions-map}}
         tmpfile=$(mktemp)
-        test -f ${{inputs.filename}} || touch ${{inputs.filename}} && echo '{}' > ${{inputs.filename}}
-        jq --arg versions ${{ inputs.newversions }} '. * ($versions | fromjson)' ${{inputs.filename}} > $tmpfile && mv $tmpfile ${{inputs.filename}}
-    - name: Update manifest
-      if: ${{ inputs.replaceall == 'true' }}
-      shell: bash
-      working-directory: manifests
-      run: |
-        test -f ${{inputs.filename}} || touch ${{inputs.filename}} && echo '{}' > ${{inputs.filename}}
-        echo ${{ fromJSON(inputs.newversions) }} > ${{inputs.filename}}
+        test -f ${{inputs.manifest-file-path}} || touch ${{inputs.manifest-file-path}} && echo '{}' > ${{inputs.manifest-file-path}}
+        jq --arg versions ${{ inputs.new-versions-map }} '. * ($versions | fromjson)' ${{inputs.manifest-file-path}} > $tmpfile && mv $tmpfile ${{inputs.manifest-file-path}}
     - name: Push to repo
       shell: bash
       working-directory: manifests
       run: |
-        git remote set-url --push origin https://${{ inputs.gitusername }}:${{ inputs.ghtoken }}@github.com/${{ inputs.manifestrepo }}
+        git remote set-url --push origin https://${{ inputs.gitusername }}:${{ inputs.ghtoken }}@github.com/${{ inputs.manifest-repo }}
         git config user.email "${{ inputs.gitemail }}"
         git config user.name "${{ inputs.gitusername }}"
         git add .
