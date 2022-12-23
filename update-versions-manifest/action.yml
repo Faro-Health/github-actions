@@ -12,10 +12,10 @@ inputs:
     default: false
     required: false
     description: 'flag to replaceentire contents of selected file'
-  manifestrepo:
+  manifest-repo:
     required: true
     description: 'repo of manifest files'
-  manifestreporef:
+  manifest-repo-ref:
     required: true
     description: 'branch ref for manifests file repo'
   gitemail:
@@ -34,8 +34,8 @@ runs:
       with:
         persist-credentials: false
         token: ${{ inputs.ghtoken }}
-        repository: ${{ inputs.manifestrepo }}
-        ref:  ${{ inputs.manifestreporef }}
+        repository: ${{ inputs.manifest-repo }}
+        ref:  ${{ inputs.manifest-repo-ref }}
         path: manifests
     - name: Update manifest
       if: ${{ inputs.replaceall != 'true' }}
