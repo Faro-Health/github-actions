@@ -44,12 +44,14 @@ runs:
       run: |
         echo ${{inputs.newversions}}
         tmpfile=$(mktemp)
+        test -f ${{inputs.filename}} || touch ${{inputs.filename}} && echo '{}' > ${{inputs.filename}}
         jq --arg versions ${{ inputs.newversions }} '. * ($versions | fromjson)' ${{inputs.filename}} > $tmpfile && mv $tmpfile ${{inputs.filename}}
     - name: Update manifest
       if: ${{ inputs.replaceall == 'true' }}
       shell: bash
       working-directory: manifests
       run: |
+        test -f ${{inputs.filename}} || touch ${{inputs.filename}} && echo '{}' > ${{inputs.filename}}
         echo ${{ fromJSON(inputs.newversions) }} > ${{inputs.filename}}
     - name: Push to repo
       shell: bash
