@@ -2,12 +2,16 @@ name: 'update-versions-manifest'
 description: 'updates current versions manifest with latest deployed version'
 
 inputs:
-  filename:
+  manifest-file-path:
     required: true
     description: 'Deployed environment'
-  newversions:
+  new-versions-map:
     required: true
     description: 'escaped json representing a dictionary of new Versions deployed to a specific environment'
+  replace-whole-file:
+    default: false
+    required: false
+    description: 'flag to replaceentire contents of selected file'
   manifestrepo:
     required: true
     description: 'repo of manifest files'
@@ -22,9 +26,6 @@ inputs:
     description: 'git account username'
   ghtoken:
     required: true
-  replaceall:
-    required: false
-    description: 'flag to replaceentire contents of selected file'
 
 runs:
   using: "composite"
