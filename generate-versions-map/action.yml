@@ -1,5 +1,5 @@
-name: 'update-versions-manifest'
-description: 'updates current versions manifest with latest deployed version'
+name: 'generate-versions-map'
+description: 'creates a version map escaped json string for a single application to be used with update-versions-manifest'
 
 inputs:
   app-name:
