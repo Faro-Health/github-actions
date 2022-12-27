@@ -19,10 +19,10 @@ runs:
       id: ver
       shell: bash
       run: |
-        versionsmap=$(echo -n '{ "${{ inputs.app-name }}" : { version: "${{ inputs.version }}", repo: "${{ inputs.repository }}" } }' | jq -Rsa)
-        echo $versionsmap;
-        echo "mapz=$versionsmap" >> $GITHUB_OUTPUT
+        versionmap=$(echo -n '{ "${{ inputs.app-name }}" : { version: "${{ inputs.version }}", repo: "${{ inputs.repository }}" } }' | jq -Rsa)
+        echo $versionmap;
+        echo "mapz=$versionmap" >> $GITHUB_OUTPUT
     - name: Update zmanifest
       id: versionmap
       shell: bash
-      run: echo "map={}" >> $GITHUB_OUTPUT
+      run: echo "map='{}'" >> $GITHUB_OUTPUT
