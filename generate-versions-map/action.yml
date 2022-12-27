@@ -20,4 +20,5 @@ runs:
       run: |
         versionsmap=$(echo -n '{ "${{ inputs.app-name }}" : { version: "${{ inputs.version }}", repo: "${{ inputs.repository }}" } }' | jq -Rsa)
         echo $versionsmap;
+        echo "map=$versionsmap"
         echo "map=$versionsmap" >> $GITHUB_OUTPUT
