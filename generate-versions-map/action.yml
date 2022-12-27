@@ -19,6 +19,6 @@ runs:
       id: ver
       shell: bash
       run: |
-        versionmap=$(echo -n '{ "${{ inputs.app-name }}" : { version: "${{ inputs.version }}", repo: "${{ inputs.repository }}" } }' | jq -Rsa)
+        versionmap=$(echo -n '{ "${{ inputs.app-name }}" : { "version": "${{ inputs.version }}", "repo": "${{ inputs.repository }}" } }' | jq -Rsa)
         echo $versionmap;
         echo "versionmap=$versionmap" >> $GITHUB_ENV
