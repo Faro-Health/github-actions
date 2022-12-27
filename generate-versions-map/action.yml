@@ -17,7 +17,6 @@ runs:
   steps:
     - name: Update manifest
       shell: bash
-      working-directory: manifests
       run: |
         echo "map=$(echo -n '{
               "${{ inputs.app-name }}" : {
