@@ -16,11 +16,13 @@ runs:
   using: "composite"
   steps:
     - name: Update manifest
+      id: ver
       shell: bash
       run: |
         versionsmap=$(echo -n '{ "${{ inputs.app-name }}" : { version: "${{ inputs.version }}", repo: "${{ inputs.repository }}" } }' | jq -Rsa)
         echo $versionsmap;
         echo "mapz=$versionsmap" >> $GITHUB_OUTPUT
     - name: Update zmanifest
+      id: versionmap
       shell: bash
       run: echo "map={}" >> $GITHUB_OUTPUT
