@@ -22,7 +22,7 @@ inputs:
     description: 'git account email'
     required: false
   gitusername:
-    default: "CI Build"
+    default: "CI_Build"
     required: false
     description: 'git account username'
 
