@@ -21,8 +21,8 @@ runs:
       run: |
         versionmap=$(echo -n '{ "${{ inputs.app-name }}" : { version: "${{ inputs.version }}", repo: "${{ inputs.repository }}" } }' | jq -Rsa)
         echo $versionmap;
-        echo "mapz=$versionmap" >> $GITHUB_OUTPUT
+        echo "mapz=$versionmap" >> $GITHUB_ENV
     - name: Update zmanifest
       id: versionmap
       shell: bash
-      run: echo "map='{}'" >> $GITHUB_OUTPUT
+      run: echo "versionmap='{}'" >> $GITHUB_ENV
