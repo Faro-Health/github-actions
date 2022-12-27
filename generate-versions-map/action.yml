@@ -18,9 +18,6 @@ runs:
     - name: Update manifest
       shell: bash
       run: |
-        echo "map=$(echo -n '{
-              "${{ inputs.app-name }}" : {
-                version: "${{ inputs.version }}",
-                repo: "${{ inputs.repository }}",
-              }
-            }' | jq -Rsa)" >> $GITHUB_OUTPUT
+        versionsmap=$(echo -n '{ "${{ inputs.app-name }}" : { version: "${{ inputs.version }}", repo: "${{ inputs.repository }}" } }' | jq -Rsa)
+        echo $versionsmap;
+        echo "map=$versionsmap" >> $GITHUB_OUTPUT
