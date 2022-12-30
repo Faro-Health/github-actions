@@ -22,7 +22,7 @@ inputs:
     description: 'git account email'
     required: false
   gitusername:
-    default: "CI Build"
+    default: "CI_Build"
     required: false
     description: 'git account username'
 
@@ -42,7 +42,7 @@ runs:
       run: |
         echo ${{inputs.new-versions-map}}
         tmpfile=$(mktemp)
-        test -f ${{inputs.manifest-file-path}} || touch ${{inputs.manifest-file-path}} && echo '{}' > ${{inputs.manifest-file-path}}
+        test -f ${{inputs.manifest-file-path}} || ( touch ${{inputs.manifest-file-path}} && echo '{}' > ${{inputs.manifest-file-path}} )
         jq --arg versions ${{ inputs.new-versions-map }} '. * ($versions | fromjson)' ${{inputs.manifest-file-path}} > $tmpfile && mv $tmpfile ${{inputs.manifest-file-path}}
     - name: Push to repo
       shell: bash

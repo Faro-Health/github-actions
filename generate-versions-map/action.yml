@@ -16,11 +16,9 @@ runs:
   using: "composite"
   steps:
     - name: Update manifest
+      id: ver
       shell: bash
       run: |
-        echo "map=$(echo -n '{
-              "${{ inputs.app-name }}" : {
-                version: "${{ inputs.version }}",
-                repo: "${{ inputs.repository }}",
-              }
-            }' | jq -Rsa)" >> $GITHUB_OUTPUT
+        versionmap=$(echo -n '{ "${{ inputs.app-name }}" : { "version": "${{ inputs.version }}", "repo": "${{ inputs.repository }}" } }' | jq -Rsa)
+        echo $versionmap;
+        echo "versionmap=$versionmap" >> $GITHUB_ENV
