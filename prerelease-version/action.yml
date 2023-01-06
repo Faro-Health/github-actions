@@ -6,6 +6,9 @@ inputs:
     required: false
     default: '.'
     description: 'Working directory without trailing slash'
+  ghToken:
+    required: true
+    description: 'Github Token'
 
 outputs:
   version:
@@ -24,10 +27,21 @@ runs:
     - run: npm run prerelease:version
       shell: bash
       working-directory: ${{inputs.working-directory}}
-    - run: git pull --ff --no-edit && git push
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v4
+      working-directory: ${{inputs.working-directory}}
+    - name: merge
+      uses: buildsville/simple-merge@v1
+      with:
+        token: ${{ inputs.ghToken }}
+        method: 'merge'
+        title: 'Version bump'
+        message: 'Bumping Version Merge'
+    - id: prerelease-version
+      run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{inputs.working-directory}}
     - id: prerelease-version
-      run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+      run: echo "package_name=$(node -p "require('./package.json').name")" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{inputs.working-directory}}
