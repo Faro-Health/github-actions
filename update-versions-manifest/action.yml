@@ -44,10 +44,6 @@ runs:
         tmpfile=$(mktemp)
         test -f ${{inputs.manifest-file-path}} || ( touch ${{inputs.manifest-file-path}} && echo '{}' > ${{inputs.manifest-file-path}} )
         jq --arg versions ${{ inputs.new-versions-map }} '. * ($versions | fromjson)' ${{inputs.manifest-file-path}} > $tmpfile && mv $tmpfile ${{inputs.manifest-file-path}}
-    - run: |
-        ls -la
-      shell: bash
-      working-directory: manifests
     - name: Push to repo
       shell: bash
       working-directory: manifests
