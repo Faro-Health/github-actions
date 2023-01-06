@@ -46,6 +46,6 @@ runs:
       run: |
         echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT;
         echo "name=$(node -p "require('./package.json').name")" >> $GITHUB_OUTPUT;
-        echo "bleh='meh'")" >> $GITHUB_OUTPUT;
+        echo "bleh='meh'" >> $GITHUB_OUTPUT;
       shell: bash
       working-directory: ${{inputs.working-directory}}
