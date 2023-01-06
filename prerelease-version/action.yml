@@ -34,8 +34,8 @@ runs:
       with:
         token: ${{ inputs.ghtoken }}
         method: 'merge'
-        title: 'Version bump'
-        message: 'Bumping Version Merge'
+        title: 'Version bump [skip ci]'
+        message: 'Bumping Version Merge [skip ci]'
     - id: prerelease-version
       run: |
         echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
