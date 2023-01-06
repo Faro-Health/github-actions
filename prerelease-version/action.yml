@@ -48,10 +48,16 @@ runs:
         echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{inputs.working-directory}}
-    - name: Set output
+    - name: Set outputs
       id: prerelease-name
       run: |
         echo "$(node -p "require('./package.json').name")"
         echo "name=$(node -p "require('./package.json').name")" >> $GITHUB_OUTPUT
+      shell: bash
+      working-directory: ${{inputs.working-directory}}
+    - name: Set outputss
+      id: prerelease-name
+      run: |
+        echo "bleh='bleh'" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{inputs.working-directory}}
