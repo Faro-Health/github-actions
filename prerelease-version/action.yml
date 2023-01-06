@@ -38,7 +38,7 @@ runs:
       uses: juliangruber/merge-pull-request-action@v1
       with:
         number: ${{ steps.pr.outputs.pull-request-number }}
-        token: ${{inputs.ghtoken}}
+        github-token: ${{inputs.ghtoken}}
         method: squash
 
     - name: Set output
