@@ -28,3 +28,4 @@ runs:
         versionmap=$(echo -n '{ "${{ inputs.app-name }}" : { "version": "${{ inputs.version }}", "repo": "${{ inputs.repository }}" } }' | jq -Rsa)
         echo $versionmap
         echo "versionmap=$versionmap" >> $GITHUB_OUTPUT
+        echo "versionmap=$versionmap" >> $GITHUB_ENV
