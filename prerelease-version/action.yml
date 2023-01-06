@@ -42,7 +42,7 @@ runs:
         method: squash
 
     - name: Set output
-      id: prerelease-version
+      id: prerelease-versions
       run: |
         echo "$(node -p "require('./package.json').version")";
         echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT;
