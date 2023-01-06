@@ -45,6 +45,6 @@ runs:
       id: prerelease-version
       run: |
         echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT;
-        echo "package_name=$(node -p "require('./package.json').name")" >> $GITHUB_OUTPUT;
+        echo "packagename=$(node -p "require('./package.json').name")" >> $GITHUB_OUTPUT;
       shell: bash
       working-directory: ${{inputs.working-directory}}
