@@ -29,7 +29,6 @@ runs:
       working-directory: ${{inputs.working-directory}}
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v4
-      working-directory: ${{inputs.working-directory}}
     - name: merge
       uses: buildsville/simple-merge@v1
       with:
@@ -38,10 +37,8 @@ runs:
         title: 'Version bump'
         message: 'Bumping Version Merge'
     - id: prerelease-version
-      run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-      shell: bash
-      working-directory: ${{inputs.working-directory}}
-    - id: prerelease-version
-      run: echo "package_name=$(node -p "require('./package.json').name")" >> $GITHUB_OUTPUT
+      run: |
+        echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+        echo "package_name=$(node -p "require('./package.json').name")" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{inputs.working-directory}}
