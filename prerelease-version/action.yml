@@ -6,7 +6,7 @@ inputs:
     required: false
     default: '.'
     description: 'Working directory without trailing slash'
-  ghToken:
+  ghtoken:
     required: true
     description: 'Github Token'
 
@@ -33,7 +33,7 @@ runs:
     - name: merge
       uses: buildsville/simple-merge@v1
       with:
-        token: ${{ inputs.ghToken }}
+        token: ${{ inputs.ghtoken }}
         method: 'merge'
         title: 'Version bump'
         message: 'Bumping Version Merge'
