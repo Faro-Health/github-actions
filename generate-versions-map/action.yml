@@ -12,11 +12,17 @@ inputs:
     required: true
     description: 'repository of app'
 
+outputs:
+  versionmap:
+    description: "Map of info for current version"
+    value: ${{ steps.prerelease-version.outputs.versionmap }}
+
+
 runs:
   using: "composite"
   steps:
     - name: Update manifest
-      id: ver
+      id: version-map
       shell: bash
       run: |
         versionmap=$(echo -n '{ "${{ inputs.app-name }}" : { "version": "${{ inputs.version }}", "repo": "${{ inputs.repository }}" } }' | jq -Rsa)
