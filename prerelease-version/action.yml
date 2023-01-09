@@ -14,7 +14,7 @@ outputs:
   version:
     description: "Final assigned prerelease version"
     value: ${{ steps.prerelease-version.outputs.version }}
-  module-name:
+  app:
     description: "App Name"
     value: ${{ steps.prerelease-name.outputs.name }}
 
