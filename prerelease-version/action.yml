@@ -6,11 +6,17 @@ inputs:
     required: false
     default: '.'
     description: 'Working directory without trailing slash'
+  ghtoken:
+    required: true
+    description: 'Github Token'
 
 outputs:
   version:
     description: "Final assigned prerelease version"
     value: ${{ steps.prerelease-version.outputs.version }}
+  app:
+    description: "App Name"
+    value: ${{ steps.prerelease-name.outputs.app }}
 
 runs:
   using: "composite"
@@ -21,13 +27,37 @@ runs:
         git config --global user.name "CI Build"
       shell: bash
       working-directory: ${{inputs.working-directory}}
+
     - run: npm run prerelease:version
       shell: bash
       working-directory: ${{inputs.working-directory}}
-    - run: git pull --ff --no-edit && git push
+
+    - name: Create Pull Request
+      id: pr
+      uses: peter-evans/create-pull-request@v4.2.3
+      with:
+        token: ${{inputs.ghtoken}}
+        branch: github-build/version
+
+    - name: Merge Pull Request
+      uses: juliangruber/merge-pull-request-action@v1
+      with:
+        number: ${{ steps.pr.outputs.pull-request-number }}
+        github-token: ${{inputs.ghtoken}}
+        method: squash
+
+    - name: Set version output
+      id: prerelease-version
+      run: |
+        echo "$(node -p "require('./package.json').version")"
+        echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{inputs.working-directory}}
-    - id: prerelease-version
-      run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+    - name: Set app output
+      id: prerelease-name
+      run: |
+        echo "$(node -p "require('./package.json').name")"
+        echo "app=$(node -p "require('./package.json').name")" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{inputs.working-directory}}

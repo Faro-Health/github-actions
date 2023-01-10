@@ -2,9 +2,9 @@ name: 'generate-versions-map'
 description: 'creates a version map escaped json string for a single application to be used with update-versions-manifest'
 
 inputs:
-  app-name:
+  app:
     required: true
-    description: 'name of app to update'
+    description: 'name of the app'
   version:
     required: true
     description: 'new version of app'
@@ -12,13 +12,18 @@ inputs:
     required: true
     description: 'repository of app'
 
+outputs:
+  versionmap:
+    description: "Map of info for current version"
+    value: ${{ steps.version-map.outputs.versionmap }}
+
 runs:
   using: "composite"
   steps:
     - name: Update manifest
-      id: ver
+      id: version-map
       shell: bash
       run: |
-        versionmap=$(echo -n '{ "${{ inputs.app-name }}" : { "version": "${{ inputs.version }}", "repo": "${{ inputs.repository }}" } }' | jq -Rsa)
-        echo $versionmap;
-        echo "versionmap=$versionmap" >> $GITHUB_ENV
+        versionmap=$(echo -n '{ "${{ inputs.app }}" : { "version": "${{ inputs.version }}", "repo": "${{ inputs.repository }}" } }' | jq -Rsa)
+        echo $versionmap
+        echo "versionmap=$versionmap" >> $GITHUB_OUTPUT
