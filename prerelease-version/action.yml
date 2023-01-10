@@ -38,7 +38,6 @@ runs:
       with:
         token: ${{inputs.ghtoken}}
         branch: github-build/version
-      working-directory: ${{inputs.working-directory}}
 
     - name: Merge Pull Request
       uses: juliangruber/merge-pull-request-action@v1
@@ -46,7 +45,6 @@ runs:
         number: ${{ steps.pr.outputs.pull-request-number }}
         github-token: ${{inputs.ghtoken}}
         method: squash
-      working-directory: ${{inputs.working-directory}}
 
     - name: Set version output
       id: prerelease-version
