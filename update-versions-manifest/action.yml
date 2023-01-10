@@ -52,7 +52,7 @@ runs:
         git config user.email "${{ inputs.gitemail }}"
         git config user.name "${{ inputs.gitusername }}"
         git add .
-        git commit -m "version manifest update $(date) [skip ci]"
+        git commit -m "Manifest update [skip ci]"
         git push
     - name: cleanup
       shell: bash
